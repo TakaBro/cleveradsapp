@@ -1,2 +1,2 @@
 include ':app', ':unity-ads'
-rootProject.name='javatestadsapp'
+rootProject.name='cleveradsapp'
