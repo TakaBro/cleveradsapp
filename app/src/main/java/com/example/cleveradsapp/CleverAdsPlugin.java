@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 public class CleverAdsPlugin implements LifecycleObserver {
 
     private String LOGTAG = "TestAds_CleverAdsPlugin";
+    private Boolean firstExecution = true;
     private InterstitialController interstitialController;
     private ControllerFactory controllerFactory;
 
@@ -54,7 +55,11 @@ public class CleverAdsPlugin implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onEnterForeground() {
         Log.d(LOGTAG, "App in FOREGROUND");
-        interstitialController.resume();
+        if(firstExecution){
+           firstExecution = false;
+        }else {
+            interstitialController.resume();
+        }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onEnterBackground() {

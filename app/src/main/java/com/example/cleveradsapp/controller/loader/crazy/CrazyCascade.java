@@ -13,13 +13,12 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
 
     private String LOGTAG = "TestAds_CrazyCascade";
     private NetworkAd loadedAd;
-    private boolean pauseCascade = false, fireAdLoadedLater = false;
+    private boolean pauseCascade = false, fireAdLoadedLater = false,
+            waitAndLoadAdAgainLater = false, waitingToLoadAdAgain = false;
     private int loadedAdIndex, currentAdIndex = 0;
     private Activity activity;
     private Handler handler = new Handler();
-    private long timeLimit = 5000;
-    private long checkTime = 1000;
-    private long originalTimeLimit = timeLimit;
+    private long timeLimit = 10000;
     private CascadeListener listener;
 
     public CrazyCascade(Activity activity){
@@ -31,21 +30,27 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
     public void loadAd(Activity activity) {
         Log.d(LOGTAG, "Check if can load ad");
 
-        if(!pauseCascade){
-            Log.d(LOGTAG, "Load networkAd: " + currentAdIndex + " " + networkAdsList.get(currentAdIndex).getTag()
-                    + " " + networkAdsList.get(currentAdIndex).getNet());
-            networkAdsList.get(currentAdIndex).request();
+        if(pauseCascade || waitingToLoadAdAgain){
+            Log.d(LOGTAG, "Cascade paused or waiting timelimit...");
         }else {
-            Log.d(LOGTAG, "Cascade paused...");
-            waitAndLoadAgain();
+            if(waitAndLoadAdAgainLater){
+                waitAndLoadAdAgain();
+            }else{
+                Log.d(LOGTAG, "Load networkAd: " + currentAdIndex
+                        + " " + networkAdsList.get(currentAdIndex).getTag()
+                        + " " + networkAdsList.get(currentAdIndex).getNet());
+                networkAdsList.get(currentAdIndex).request();
+            }
         }
     }
 
-    public void waitAndLoadAgain(){
+    public void waitAndLoadAdAgain(){
+        Log.d(LOGTAG, "waitingToLoadAdAgain()...");
+        waitingToLoadAdAgain = true;
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                Log.d(LOGTAG, "waitAndLoadAgain()...");
+                waitingToLoadAdAgain = false;
                 loadAd(activity);
             }
         };
@@ -54,15 +59,16 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
 
     public void pause() {
         this.pauseCascade = true;
-        timeLimit = checkTime;
     }
 
     public void resume() {
         this.pauseCascade = false;
-        timeLimit = originalTimeLimit;
         if(fireAdLoadedLater){
             listener.adLoaded(loadedAd);
             fireAdLoadedLater = false;
+            waitAndLoadAdAgain();
+        }else {
+            loadAd(activity);
         }
     }
 
@@ -81,7 +87,11 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
         currentAdIndex++;
         if(currentAdIndex == loadedAdIndex || currentAdIndex == networkAdsList.size()){
             currentAdIndex=0;
-            waitAndLoadAgain();
+            if(pauseCascade){
+                waitAndLoadAdAgainLater = true;
+            } else {
+                waitAndLoadAdAgain();
+            }
         }else{
             loadAd(activity); //load next ad
         }
@@ -89,14 +99,14 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
 
     @Override
     public void adLoaded(NetworkAd ad) {
-        if(!pauseCascade) {
-            listener.adLoaded(ad);
-        }else {
-            fireAdLoadedLater = true;
-            loadedAd = ad;
-        }
         loadedAdIndex = currentAdIndex;
         currentAdIndex = 0;
-        waitAndLoadAgain();
+        if(pauseCascade) {
+            fireAdLoadedLater = true;
+            loadedAd = ad;
+        }else {
+            listener.adLoaded(ad);
+            waitAndLoadAdAgain();
+        }
     }
 }
