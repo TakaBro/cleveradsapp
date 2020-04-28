@@ -14,12 +14,22 @@ public class SimpleCascade implements Cascade {
 
     }*/
 
-    public SimpleCascade(LinkedHashMap<String, String> tags, int adType, Activity act){
+    public SimpleCascade(LinkedHashMap<String, String> tags, int adType, Activity act) {
         Log.d("TestAds_SimpleCascade", "SimpleCascade instance created");
     }
 
     @Override
     public void loadAd(Activity act) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
 
     }
 

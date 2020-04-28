@@ -47,7 +47,7 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
         if (UnityAds.isReady (placementId)) {
             UnityAds.show (activity, placementId);
             Log.d(TAG, "UNITY AD SHOW");
-        }else{
+        } else {
             Log.d(TAG, "UNITY AD CAN`T SHOW");
         }
     }
@@ -65,7 +65,7 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
     // Implement the IUnityAdsListener interface methods:
     @Override
     public void onUnityAdsReady(String s) {
-        if(s.equals(placementId)){
+        if (s.equals(placementId)){
             Log.d(TAG, "UNITY AD READY TO SHOW " + s); // Implement functionality for an ad being ready to show.
             loaderListener.adLoaded(UnityInterstitialNetworkAd.this);
         }

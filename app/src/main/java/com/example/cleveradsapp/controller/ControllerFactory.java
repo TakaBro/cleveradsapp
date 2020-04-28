@@ -10,10 +10,9 @@ public class ControllerFactory {
     InterstitialController controller;
 
     public InterstitialController createController(LinkedHashMap<String, String> tags, int adType,
-                                                    Activity activity){
+                                                    Activity activity) {
         //0 standard, 1 interstitial and 2 rewarded
-        switch (adType)
-        {
+        switch (adType) {
             case 0:
                 Log.d("TestAds_ControlFactory", "Standard Controller created");
                 // new Standard Controller

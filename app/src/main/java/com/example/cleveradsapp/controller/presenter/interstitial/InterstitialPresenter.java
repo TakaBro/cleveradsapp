@@ -27,7 +27,7 @@ public class InterstitialPresenter implements Presenter, NetworkAdPresenterListe
         listener.adClosed();
     }
 
-    public void addListener(PresenterListener listener){
+    public void addListener(PresenterListener listener) {
         this.listener = listener;
     }
 }

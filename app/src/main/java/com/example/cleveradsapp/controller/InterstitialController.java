@@ -24,7 +24,7 @@ public class InterstitialController extends AppCompatActivity implements Present
     private InterstitialPresenter presenter;
     private InterstitialNetworkAdFactory interstitialNetworkAdFactory;
 
-    public InterstitialController(LinkedHashMap<String, String> tags, int adType, Activity activity){
+    public InterstitialController(LinkedHashMap<String, String> tags, int adType, Activity activity) {
         this.activity = activity;
         setupCascade(adType, activity, this);
         setupPresenter(this);
@@ -33,53 +33,52 @@ public class InterstitialController extends AppCompatActivity implements Present
         loadAd(activity);
     }
 
-    public void setupPresenter(PresenterListener listener){
+    public void setupPresenter(PresenterListener listener) {
         presenter = new InterstitialPresenter();
         presenter.addListener(listener);
     }
 
     public void setupCascade(int adType, Activity activity,
-                             CascadeListener listener)
-    {
+                             CascadeListener listener) {
         //0 standard, 1 interstitial and 2 rewarded
-        if(adType == 0){
+        if(adType == 0) {
             /*cascade = new SimpleCascade(tags, adType, activity);
             cascade.addListener(listener);*/
-        }else{
+        } else {
             cascade = new CrazyCascade(activity);
             cascade.addListener(listener);
         }
     }
 
-    public void createNetworkAds(LinkedHashMap<String, String> tags, Activity activity){
+    public void createNetworkAds(LinkedHashMap<String, String> tags, Activity activity) {
         for (int tagsIndex = 0; tagsIndex < tags.size(); tagsIndex++) {
             cascade.networkAdsList.add(interstitialNetworkAdFactory.createInterstitialNetworkAd(
                     tags, tagsIndex, cascade, presenter, activity));
         }
     }
 
-    public void loadAd(Activity activity){
+    public void loadAd(Activity activity) {
         Log.d(LOGTAG, "loading Ad ...");
         cascade.loadAd(activity);
     }
 
-    public void pause(){
+    public void pause() {
         Log.d(LOGTAG, "Pause Cascade");
         cascade.pause();
     }
 
-    public void resume(){
+    public void resume() {
         Log.d(LOGTAG, "Continue Cascade");
         cascade.resume();
     }
 
-    public void showAd(){
-        if (adLoaded != null){
+    public void showAd() {
+        if (adLoaded != null) {
             Log.d(LOGTAG, "Showing Interstitial Ad");
             presenter.showAd(adLoaded);
-        }else if(UnityAds.isReady ("video")) {
+        } else if(UnityAds.isReady ("video")) {
             UnityAds.show(activity, "video");
-        }else {
+        } else {
             Log.d(LOGTAG, "Ad is NULL");
         }
     }

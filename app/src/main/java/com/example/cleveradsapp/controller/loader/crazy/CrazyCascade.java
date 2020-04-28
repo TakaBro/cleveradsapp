@@ -11,70 +11,52 @@ import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 
 public class CrazyCascade implements Cascade, NetworkAdLoadListener {
 
-    private String LOGTAG = "TestAds_CrazyCascade";
-    private NetworkAd loadedAd;
-    private boolean pauseCascade = false, fireAdLoadedLater = false,
-            waitAndLoadAdAgainLater = false, waitingToLoadAdAgain = false;
-    private int loadedAdIndex, currentAdIndex = 0;
-    private Activity activity;
-    private Handler handler = new Handler();
-    private long timeLimit = 10000;
-    private CascadeListener listener;
+    private String LOG_TAG = "TestAds_CrazyCascade";
+    protected long TIME_LIMIT = 5000;
 
-    public CrazyCascade(Activity activity){
-        Log.d(LOGTAG, "CrazyCascade instance created");
+    protected NetworkAd loadedAd = null;
+    protected boolean timeLimitEnded = false;
+    protected int loadedAdIndex = -1;
+    protected int currentAdIndex = 0;
+    protected Handler handler = new Handler();
+    protected Activity activity;
+    protected CascadeListener listener;
+    protected AbstractCrazyCascadeState currentState;
+    protected CrazyCascadeReadyState readyState = new CrazyCascadeReadyState(this);
+    protected CrazyCascadePausedReadyState pausedReadyState= new CrazyCascadePausedReadyState(this);
+    protected CrazyCascadeLoadingState loadingState = new CrazyCascadeLoadingState(this);
+    protected CrazyCascadePausedLoadingState pausedLoadingState = new CrazyCascadePausedLoadingState(this);
+    protected CrazyCascadeWaitToRetryState waitToRetryState = new CrazyCascadeWaitToRetryState(this);
+    protected CrazyCascadePausedWaitToRetryState pausedWaitToRetryState = new CrazyCascadePausedWaitToRetryState(this);
+
+    public CrazyCascade(Activity activity) {
+        Log.d(LOG_TAG, "CrazyCascade instance created");
         this.activity = activity;
+        currentState = readyState;
     }
 
     @Override
     public void loadAd(Activity activity) {
-        Log.d(LOGTAG, "Check if can load ad");
-
-        if(pauseCascade || waitingToLoadAdAgain){
-            Log.d(LOGTAG, "Cascade paused or waiting timelimit...");
-        }else {
-            if(waitAndLoadAdAgainLater){
-                waitAndLoadAdAgain();
-            }else{
-                Log.d(LOGTAG, "Load networkAd: " + currentAdIndex
-                        + " " + networkAdsList.get(currentAdIndex).getTag()
-                        + " " + networkAdsList.get(currentAdIndex).getNet());
-                networkAdsList.get(currentAdIndex).request();
-            }
-        }
-    }
-
-    public void waitAndLoadAdAgain(){
-        Log.d(LOGTAG, "waitingToLoadAdAgain()...");
-        waitingToLoadAdAgain = true;
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                waitingToLoadAdAgain = false;
-                loadAd(activity);
-            }
-        };
-        handler.postDelayed(r, timeLimit);
+        currentState.loadAd(activity);
     }
 
     public void pause() {
-        this.pauseCascade = true;
+        currentState.pause();
     }
 
     public void resume() {
-        this.pauseCascade = false;
-        if(fireAdLoadedLater){
-            listener.adLoaded(loadedAd);
-            fireAdLoadedLater = false;
-            waitAndLoadAdAgain();
-        }else {
-            loadAd(activity);
-        }
+        currentState.resume();
     }
 
     @Override
-    public void reset(){
-        loadedAdIndex = networkAdsList.size();
+    public void reset() {
+        Log.d(LOG_TAG, "reset()");
+        loadedAd = null;
+        timeLimitEnded = false;
+        loadedAdIndex = -1;
+        currentAdIndex = 0;
+        currentState = readyState;
+        loadAd(activity);
     }
 
     @Override
@@ -83,30 +65,13 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
     }
 
     @Override
-    public void adFailedToLoad() {
-        currentAdIndex++;
-        if(currentAdIndex == loadedAdIndex || currentAdIndex == networkAdsList.size()){
-            currentAdIndex=0;
-            if(pauseCascade){
-                waitAndLoadAdAgainLater = true;
-            } else {
-                waitAndLoadAdAgain();
-            }
-        }else{
-            loadAd(activity); //load next ad
-        }
+    public void adLoaded(NetworkAd ad) {
+        Log.d(LOG_TAG, "currentState.onAdLoaded(ad)");
+        currentState.onAdLoaded(ad);
     }
 
     @Override
-    public void adLoaded(NetworkAd ad) {
-        loadedAdIndex = currentAdIndex;
-        currentAdIndex = 0;
-        if(pauseCascade) {
-            fireAdLoadedLater = true;
-            loadedAd = ad;
-        }else {
-            listener.adLoaded(ad);
-            waitAndLoadAdAgain();
-        }
+    public void adFailedToLoad() {
+        currentState.onAdFailedToLoad();
     }
 }

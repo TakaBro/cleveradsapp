@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         poolTags.put("ca-app-pub-3940256099942544/1033173712", "AdMob");            //test
         poolTags.put("1675872-video", "UnityAds");                                  //unityads
         poolTags.put("ca-app-pub-5073389895475742/8102108072", "AdMob-AppLovin");   //mediation
-        if(cleverAdsPlugin == null){
+        if(cleverAdsPlugin == null) {
             cleverAdsPlugin = new CleverAdsPlugin(poolTags, 1, this);
         }
     }

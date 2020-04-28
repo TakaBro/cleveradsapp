@@ -24,7 +24,7 @@ public class CleverAdsPlugin implements LifecycleObserver {
     private InterstitialController interstitialController;
     private ControllerFactory controllerFactory;
 
-    public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, Activity activity){
+    public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, Activity activity) {
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
@@ -34,7 +34,7 @@ public class CleverAdsPlugin implements LifecycleObserver {
         interstitialController = controllerFactory.createController(poolTags, adType, activity);
     }
 
-    public void initializeSDKs(Activity activity){
+    public void initializeSDKs(Activity activity) {
         // Initialize ADMOB SDK
         MobileAds.initialize(activity, new OnInitializationCompleteListener() {
             @Override
@@ -47,7 +47,7 @@ public class CleverAdsPlugin implements LifecycleObserver {
         unityAdNet.initializeUnitySDK(activity);*/
     }
 
-    public void showInsterstitialAd(){
+    public void showInsterstitialAd() {
         Log.d(LOGTAG, "Trying to show ad ...");
         interstitialController.showAd();
     }
@@ -55,7 +55,7 @@ public class CleverAdsPlugin implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onEnterForeground() {
         Log.d(LOGTAG, "App in FOREGROUND");
-        if(firstExecution){
+        if (firstExecution) {
            firstExecution = false;
         }else {
             interstitialController.resume();

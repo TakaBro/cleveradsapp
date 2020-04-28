@@ -12,6 +12,10 @@ public interface Cascade {
 
     void loadAd(Activity act);
 
+    void pause();
+
+    void resume();
+
     void reset();
 
     void addListener(CascadeListener cascadeListener);

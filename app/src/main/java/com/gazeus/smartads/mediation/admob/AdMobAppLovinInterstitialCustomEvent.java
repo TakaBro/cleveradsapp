@@ -89,32 +89,23 @@ public class AdMobAppLovinInterstitialCustomEvent
         sdk.setPluginVersion( "AdMob-2.2.1" );
 
         // Zones support is available on AppLovin SDK 7.5.0 and higher
-        if ( AppLovinSdk.VERSION_CODE >= 750 && customEventExtras != null && customEventExtras.containsKey( "zone_id" ) )
-        {
+        if ( AppLovinSdk.VERSION_CODE >= 750 && customEventExtras != null && customEventExtras.containsKey( "zone_id" ) ) {
             zoneId = customEventExtras.getString( "zone_id" );
-        }
-        else
-        {
+        } else {
             zoneId = DEFAULT_ZONE;
         }
 
         // Check if we already have a preloaded ad for the given zone
         final AppLovinAd preloadedAd = dequeueAd( zoneId );
-        if ( preloadedAd != null )
-        {
+        if ( preloadedAd != null ) {
             log( DEBUG, "Found preloaded ad for zone: {" + zoneId + "}" );
             adReceived( preloadedAd );
-        }
-        else
-        {
+        } else {
             // If this is a default Zone, load the interstitial ad normally
-            if ( DEFAULT_ZONE.equals( zoneId ) )
-            {
+            if ( DEFAULT_ZONE.equals( zoneId ) ) {
                 sdk.getAdService().loadNextAd( AppLovinAdSize.INTERSTITIAL, this );
-            }
-            // Otherwise, use the Zones API
-            else
-            {
+            } else {
+                // Otherwise, use the Zones API
                 sdk.getAdService().loadNextAdForZoneId( zoneId, this );
             }
         }
@@ -124,8 +115,7 @@ public class AdMobAppLovinInterstitialCustomEvent
     public void showInterstitial()
     {
         final AppLovinAd preloadedAd = dequeueAd( zoneId );
-        if ( preloadedAd != null )
-        {
+        if ( preloadedAd != null ) {
             final AppLovinSdk sdk = AppLovinSdk.getInstance( context );
 
             final AppLovinInterstitialAdDialog interstitialAd = AppLovinInterstitialAd.create( sdk, context );
@@ -133,9 +123,7 @@ public class AdMobAppLovinInterstitialCustomEvent
             interstitialAd.setAdClickListener( this );
             interstitialAd.setAdVideoPlaybackListener( this );
             interstitialAd.showAndRender( preloadedAd );
-        }
-        else
-        {
+        } else {
             log( ERROR, "Failed to show an AppLovin interstitial before one was loaded" );
             listener.onAdFailedToLoad( AdRequest.ERROR_CODE_INTERNAL_ERROR );
         }
@@ -276,16 +264,11 @@ public class AdMobAppLovinInterstitialCustomEvent
 
     private static int toAdMobErrorCode(final int applovinErrorCode)
     {
-        if ( applovinErrorCode == AppLovinErrorCodes.NO_FILL )
-        {
+        if ( applovinErrorCode == AppLovinErrorCodes.NO_FILL ) {
             return AdRequest.ERROR_CODE_NO_FILL;
-        }
-        else if ( applovinErrorCode == AppLovinErrorCodes.NO_NETWORK || applovinErrorCode == AppLovinErrorCodes.FETCH_AD_TIMEOUT )
-        {
+        } else if ( applovinErrorCode == AppLovinErrorCodes.NO_NETWORK || applovinErrorCode == AppLovinErrorCodes.FETCH_AD_TIMEOUT ) {
             return AdRequest.ERROR_CODE_NETWORK_ERROR;
-        }
-        else
-        {
+        } else {
             return AdRequest.ERROR_CODE_INTERNAL_ERROR;
         }
     }
@@ -298,9 +281,7 @@ public class AdMobAppLovinInterstitialCustomEvent
         if ( Looper.myLooper() == Looper.getMainLooper() )
         {
             runnable.run();
-        }
-        else
-        {
+        } else {
             UI_HANDLER.post( runnable );
         }
     }

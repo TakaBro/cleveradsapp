@@ -21,7 +21,7 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
     private AdListener adListener;
 
     public AdMobInterstitialNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                      NetworkAdPresenterListener p_Listener, Activity activity){
+                                      NetworkAdPresenterListener p_Listener, Activity activity) {
         this.tag = tag;
         this.net = net;
         this.activity = activity;
@@ -39,8 +39,7 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
         Log.d(LOGTAG, "AdMob show()");
         mInterstitialAd.show();
     }
@@ -55,8 +54,7 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
     public void onAdFailedToLoad(int errorCode) {
         Log.d(LOGTAG, "AdMob Interstitial FAILED TO LOAD"); // Code to be executed when an ad request fails.
 
-        switch (errorCode)
-        {
+        switch (errorCode) {
             case 0:
                 Log.d(LOGTAG, "ERROR_CODE_INTERNAL_ERROR");
                 break;
@@ -95,9 +93,9 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
         presenterListener.adClosed(); // Code to be executed when the interstitial ad is closed.
     }
 
-    public String getTag(){ return this.tag; }
+    public String getTag() { return this.tag; }
 
-    public String getNet(){ return this.net; }
+    public String getNet() { return this.net; }
 
     public void listenerAdMobInterstitial() {
         mInterstitialAd.setAdListener(adListener);

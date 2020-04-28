@@ -27,7 +27,7 @@ public class AppLovinInterstitialNetworkAd implements AppLovinAdLoadListener, Ap
     private AppLovinInterstitialAdDialog interstitialAd;
 
     public AppLovinInterstitialNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                         NetworkAdPresenterListener p_Listener, Activity activity){
+                                         NetworkAdPresenterListener p_Listener, Activity activity) {
         this.tag = tag;
         this.net = net;
         this.activity = activity;

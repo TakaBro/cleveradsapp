@@ -21,13 +21,12 @@ public class InterstitialNetworkAdFactory {
                                                  int tagsIndex,
                                                  CrazyCascade cascade,
                                                  InterstitialPresenter presenter,
-                                                 Activity activity){
+                                                 Activity activity) {
 
         tag = tags.keySet().toArray()[tagsIndex].toString();
         net = tags.get(tags.keySet().toArray()[tagsIndex]);
 
-        switch (net)
-        {
+        switch (net) {
             case "AdMob":
                 Log.d("TestAds_AdFactory", "AdMobNetworkAd created");
                 ad = new AdMobInterstitialNetworkAd(tag, net, cascade, presenter, activity);
