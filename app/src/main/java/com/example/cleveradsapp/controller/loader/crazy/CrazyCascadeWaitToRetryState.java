@@ -13,18 +13,23 @@ public class CrazyCascadeWaitToRetryState extends AbstractCrazyCascadeState {
     }
 
     @Override
-    public void loadAd(Activity act) {
+    public void onWaitFinished() {
         requestAd(logTag);
-    }
-
-    @Override
-    public void reset() {
-
     }
 
     @Override
     public void pause() {
         crazyCascade.currentState = crazyCascade.pausedWaitToRetryState;
+    }
+
+    @Override
+    public void loadAd(Activity act) {
+
+    }
+
+    @Override
+    public void reset() {
+
     }
 
     @Override

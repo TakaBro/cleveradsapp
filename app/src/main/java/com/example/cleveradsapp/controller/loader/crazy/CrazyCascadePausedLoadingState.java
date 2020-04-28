@@ -26,10 +26,9 @@ public class CrazyCascadePausedLoadingState extends AbstractCrazyCascadeState {
         if (crazyCascade.currentAdIndex == crazyCascade.loadedAdIndex
                 || crazyCascade.currentAdIndex == networkAdsList.size()) {
             crazyCascade.currentAdIndex=0;
+            crazyCascade.currentState = crazyCascade.pausedWaitToRetryState;
+            waitAndLoadAd(logTag);
         }
-        crazyCascade.currentState = crazyCascade.pausedWaitToRetryState;
-        waitAndLoadAdAgain(logTag);
-        //crazyCascade.timeLimitEnded = false;
     }
 
     @Override
@@ -37,7 +36,8 @@ public class CrazyCascadePausedLoadingState extends AbstractCrazyCascadeState {
         if (crazyCascade.loadedAd != null) {
             crazyCascade.listener.adLoaded(crazyCascade.loadedAd);
             crazyCascade.currentState = crazyCascade.waitToRetryState;
-            waitAndLoadAdAgain(logTag);
+            crazyCascade.loadedAd = null;
+            waitAndLoadAd(logTag);
         }
     }
 
@@ -52,6 +52,11 @@ public class CrazyCascadePausedLoadingState extends AbstractCrazyCascadeState {
 
     @Override
     public void addListener(CascadeListener cascadeListener) {
+
+    }
+
+    @Override
+    public void onWaitFinished() {
 
     }
 }

@@ -6,19 +6,14 @@ import android.util.Log;
 import com.example.cleveradsapp.controller.loader.Cascade;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 
-public abstract class AbstractCrazyCascadeState implements Cascade {
+public abstract class AbstractCrazyCascadeState implements CascadeState {
 
     protected static CrazyCascade crazyCascade;
+    protected static Runnable r;
 
     public AbstractCrazyCascadeState(CrazyCascade crazyCascade) {
         this.crazyCascade = crazyCascade;
     }
-
-    @Override
-    public void loadAd(Activity activity) {}
-    public void pause() {}
-    public void onAdLoaded(NetworkAd ad) {}
-    public void onAdFailedToLoad() {}
 
     protected void requestAd(String logTag) {
         crazyCascade.currentState = crazyCascade.loadingState;
@@ -28,18 +23,34 @@ public abstract class AbstractCrazyCascadeState implements Cascade {
         crazyCascade.networkAdsList.get(crazyCascade.currentAdIndex).request();
     }
 
-    protected void waitAndLoadAdAgain(final String logTag) {
-        Log.d(logTag, "waitingToLoadAdAgain()...");
-        //crazyCascade.currentState = crazyCascade.waitToRetryState;
-        //to do PAUSED AND WAIT TO RETRY
-        Runnable r = new Runnable() {
+    protected void waitAndLoadAd(final String logTag) {
+        Log.d(logTag, "waitingToLoadAd()...");
+        r = new Runnable() {
             @Override
             public void run() {
-                if(crazyCascade.currentState != crazyCascade.readyState) {
-                    crazyCascade.currentState.loadAd(crazyCascade.activity);
-                }
+                crazyCascade.currentState.onWaitFinished();
             }
         };
         crazyCascade.handler.postDelayed(r, crazyCascade.TIME_LIMIT);
     }
+
+    public void cancelWaitAndLoadAd() {
+        crazyCascade.handler.removeCallbacks(r);
+    }
+
+    @Override
+    public void loadAd(Activity activity) {
+
+    }
+    public void pause() {
+
+    }
+    public void resume() {
+
+    }
+    public void reset() {
+
+    }
+    public void onAdLoaded(NetworkAd ad) {}
+    public void onAdFailedToLoad() {}
 }

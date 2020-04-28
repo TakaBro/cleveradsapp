@@ -6,6 +6,8 @@ import com.example.cleveradsapp.controller.loader.CascadeListener;
 
 public class CrazyCascadePausedWaitToRetryState extends AbstractCrazyCascadeState {
 
+    private String logTag = "TestAds_PausedWaitToRetryState";
+
     public CrazyCascadePausedWaitToRetryState(CrazyCascade crazyCascade) {
         super(crazyCascade);
     }
@@ -13,14 +15,17 @@ public class CrazyCascadePausedWaitToRetryState extends AbstractCrazyCascadeStat
     public void resume() {
         crazyCascade.currentState = crazyCascade.waitToRetryState;
         if (crazyCascade.timeLimitEnded) {
-            crazyCascade.currentState.loadAd(crazyCascade.activity);
+            requestAd(logTag);
         }
     }
 
     @Override
-    public void loadAd(Activity act) {
+    public void onWaitFinished() {
         crazyCascade.timeLimitEnded = true;
     }
+
+    @Override
+    public void loadAd(Activity act) {}
 
     @Override
     public void reset() {

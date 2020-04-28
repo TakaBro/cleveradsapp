@@ -35,4 +35,9 @@ public class CrazyCascadeReadyState extends AbstractCrazyCascadeState {
     public void reset() {
 
     }
+
+    @Override
+    public void onWaitFinished() {
+
+    }
 }
