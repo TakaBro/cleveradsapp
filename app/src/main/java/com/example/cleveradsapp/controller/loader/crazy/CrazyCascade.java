@@ -19,7 +19,7 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
     protected int loadedAdIndex = -1;
     protected int currentAdIndex = 0;
     protected Handler handler = new Handler();
-    protected Activity activity; //TO DO: DO NOT STORE ACTIVITY (singleton)
+    protected Activity activity;
     protected CascadeListener listener;
     protected AbstractCrazyCascadeState currentState;
     protected CrazyCascadeReadyState readyState = new CrazyCascadeReadyState(this);

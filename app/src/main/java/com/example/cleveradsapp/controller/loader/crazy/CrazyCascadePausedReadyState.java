@@ -24,4 +24,9 @@ public class CrazyCascadePausedReadyState extends AbstractCrazyCascadeState {
     public void addListener(CascadeListener cascadeListener) {
 
     }
+
+    @Override
+    public void onWaitFinished() {
+
+    }
 }
