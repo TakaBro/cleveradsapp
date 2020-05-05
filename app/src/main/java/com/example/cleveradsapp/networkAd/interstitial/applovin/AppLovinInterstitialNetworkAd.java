@@ -11,6 +11,7 @@ import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinSdk;
+import com.example.cleveradsapp.CleverAdsPlugin;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
@@ -37,14 +38,16 @@ public class AppLovinInterstitialNetworkAd implements AppLovinAdLoadListener, Ap
 
     @Override
     public void request() {
-        AppLovinSdk.getInstance( activity ).getAdService().loadNextAd( AppLovinAdSize.INTERSTITIAL,
+        AppLovinSdk.getInstance( CleverAdsPlugin.getCurrentActivity() )
+                .getAdService().loadNextAd( AppLovinAdSize.INTERSTITIAL,
                 AppLovinInterstitialNetworkAd.this);
     }
 
     @Override
     public void show() {
         Log.d(LOGTAG, "APPLOVIN show()");
-        interstitialAd = AppLovinInterstitialAd.create( AppLovinSdk.getInstance( activity ), activity );
+        interstitialAd = AppLovinInterstitialAd.create( AppLovinSdk.getInstance( CleverAdsPlugin.getCurrentActivity() ),
+                CleverAdsPlugin.getCurrentActivity() );
         interstitialAd.setAdDisplayListener(this);
         interstitialAd.setAdClickListener(this);
         interstitialAd.show();

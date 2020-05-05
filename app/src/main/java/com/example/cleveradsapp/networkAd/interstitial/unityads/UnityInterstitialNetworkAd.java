@@ -3,6 +3,7 @@ package com.example.cleveradsapp.networkAd.interstitial.unityads;
 import android.app.Activity;
 import android.util.Log;
 
+import com.example.cleveradsapp.CleverAdsPlugin;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
@@ -39,13 +40,13 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
         // Declare a new UNITY listener:
         final IUnityAdsListener myAdsListener = UnityInterstitialNetworkAd.this;
         // Initialize the UNITY SDK:
-        UnityAds.initialize(activity, unityGameID, myAdsListener, testMode);
+        UnityAds.initialize(CleverAdsPlugin.getCurrentActivity(), unityGameID, myAdsListener, testMode);
     }
 
     @Override
     public void show() {
         if (UnityAds.isReady (placementId)) {
-            UnityAds.show (activity, placementId);
+            UnityAds.show (CleverAdsPlugin.getCurrentActivity(), placementId);
             Log.d(TAG, "UNITY AD SHOW");
         } else {
             Log.d(TAG, "UNITY AD CAN`T SHOW");

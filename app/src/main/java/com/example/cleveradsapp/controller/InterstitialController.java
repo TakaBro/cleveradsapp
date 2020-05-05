@@ -1,11 +1,8 @@
 package com.example.cleveradsapp.controller;
 
-import android.app.Activity;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-//import com.example.cleveradsapp.cascade.CascadeLoader.CascadeLoader;
+import com.example.cleveradsapp.CleverAdsPlugin;
 import com.example.cleveradsapp.controller.loader.CascadeListener;
 import com.example.cleveradsapp.controller.loader.crazy.CrazyCascade;
 import com.example.cleveradsapp.controller.presenter.PresenterListener;
@@ -16,7 +13,7 @@ import com.unity3d.ads.UnityAds;
 
 import java.util.LinkedHashMap;
 
-public class InterstitialController extends AppCompatActivity implements PresenterListener, CascadeListener {
+public class InterstitialController implements PresenterListener, CascadeListener {
     private String LOGTAG = "TestAds_Controller";
     private Activity activity;
     private NetworkAd adLoaded;
@@ -77,7 +74,7 @@ public class InterstitialController extends AppCompatActivity implements Present
             Log.d(LOGTAG, "Showing Interstitial Ad");
             presenter.showAd(adLoaded);
         } else if(UnityAds.isReady ("video")) {
-            UnityAds.show(activity, "video");
+            UnityAds.show(CleverAdsPlugin.getCurrentActivity(), "video");
         } else {
             Log.d(LOGTAG, "Ad is NULL");
         }
