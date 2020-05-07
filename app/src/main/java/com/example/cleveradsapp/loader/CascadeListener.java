@@ -1,4 +1,4 @@
-package com.example.cleveradsapp.controller.loader;
+package com.example.cleveradsapp.loader;
 
 import com.example.cleveradsapp.networkAd.NetworkAd;
 

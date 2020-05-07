@@ -1,33 +1,34 @@
-package com.example.cleveradsapp.controller;
+package com.example.cleveradsapp.controller.interstitial;
 
 import android.util.Log;
 
-import com.example.cleveradsapp.CleverAdsPlugin;
-import com.example.cleveradsapp.controller.loader.CascadeListener;
-import com.example.cleveradsapp.controller.loader.crazy.CrazyCascade;
-import com.example.cleveradsapp.controller.presenter.PresenterListener;
-import com.example.cleveradsapp.controller.presenter.interstitial.InterstitialPresenter;
+import com.example.cleveradsapp.ActivityHolder;
+import com.example.cleveradsapp.controller.Controller;
+import com.example.cleveradsapp.loader.CascadeListener;
+import com.example.cleveradsapp.loader.crazy.CrazyCascade;
+import com.example.cleveradsapp.presenter.PresenterListener;
+import com.example.cleveradsapp.presenter.interstitial.InterstitialPresenter;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.interstitial.InterstitialNetworkAdFactory;
 import com.unity3d.ads.UnityAds;
 
 import java.util.LinkedHashMap;
 
-public class InterstitialController implements PresenterListener, CascadeListener {
+public class InterstitialController implements Controller, PresenterListener, CascadeListener {
     private String LOGTAG = "TestAds_Controller";
-    private Activity activity;
     private NetworkAd adLoaded;
     private CrazyCascade cascade;
     private InterstitialPresenter presenter;
     private InterstitialNetworkAdFactory interstitialNetworkAdFactory;
+    private ActivityHolder activityHolder;
 
-    public InterstitialController(LinkedHashMap<String, String> tags, int adType, Activity activity) {
-        this.activity = activity;
-        setupCascade(adType, activity, this);
+    public InterstitialController(LinkedHashMap<String, String> tags) {
+        activityHolder = ActivityHolder.getInstance();
+        setupCascade(this);
         setupPresenter(this);
         interstitialNetworkAdFactory = new InterstitialNetworkAdFactory();
-        createNetworkAds(tags, activity);
-        loadAd(activity);
+        createNetworkAds(tags);
+        loadAd();
     }
 
     public void setupPresenter(PresenterListener listener) {
@@ -35,46 +36,43 @@ public class InterstitialController implements PresenterListener, CascadeListene
         presenter.addListener(listener);
     }
 
-    public void setupCascade(int adType, Activity activity,
-                             CascadeListener listener) {
-        //0 standard, 1 interstitial and 2 rewarded
-        if(adType == 0) {
-            /*cascade = new SimpleCascade(tags, adType, activity);
-            cascade.addListener(listener);*/
-        } else {
-            cascade = new CrazyCascade(activity);
-            cascade.addListener(listener);
-        }
+    public void setupCascade(CascadeListener listener) {
+        cascade = new CrazyCascade();
+        cascade.addListener(listener);
     }
 
-    public void createNetworkAds(LinkedHashMap<String, String> tags, Activity activity) {
+    public void createNetworkAds(LinkedHashMap<String, String> tags) {
         for (int tagsIndex = 0; tagsIndex < tags.size(); tagsIndex++) {
             cascade.networkAdsList.add(interstitialNetworkAdFactory.createInterstitialNetworkAd(
-                    tags, tagsIndex, cascade, presenter, activity));
+                    tags, tagsIndex, cascade, presenter));
         }
     }
 
-    public void loadAd(Activity activity) {
+    @Override
+    public void loadAd() {
         Log.d(LOGTAG, "loading Ad ...");
-        cascade.loadAd(activity);
+        cascade.loadAd();
     }
 
+    @Override
     public void pause() {
         Log.d(LOGTAG, "Pause Cascade");
         cascade.pause();
     }
 
+    @Override
     public void resume() {
         Log.d(LOGTAG, "Continue Cascade");
         cascade.resume();
     }
 
+    @Override
     public void showAd() {
         if (adLoaded != null) {
             Log.d(LOGTAG, "Showing Interstitial Ad");
             presenter.showAd(adLoaded);
         } else if(UnityAds.isReady ("video")) {
-            UnityAds.show(CleverAdsPlugin.getCurrentActivity(), "video");
+            UnityAds.show(activityHolder.getCurrentActivity(), "video");
         } else {
             Log.d(LOGTAG, "Ad is NULL");
         }

@@ -3,6 +3,7 @@ package com.example.cleveradsapp.networkAd.interstitial.admob;
 import android.app.Activity;
 import android.util.Log;
 
+import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.CleverAdsPlugin;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
@@ -15,21 +16,21 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
 
     private String LOGTAG = "TestAds_AdmobAds";
     private String tag, net;
-    private Activity activity;
     private NetworkAdLoadListener loaderListener;
     private NetworkAdPresenterListener presenterListener;
     private InterstitialAd mInterstitialAd;
     private AdListener adListener;
+    private ActivityHolder activityHolder;
 
     public AdMobInterstitialNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                      NetworkAdPresenterListener p_Listener, Activity activity) {
+                                      NetworkAdPresenterListener p_Listener) {
         this.tag = tag;
         this.net = net;
-        this.activity = activity;
         this.loaderListener = l_listener;
         this.presenterListener = p_Listener;
         this.adListener = AdMobInterstitialNetworkAd.this;
-        mInterstitialAd = new InterstitialAd(CleverAdsPlugin.getCurrentActivity());
+        activityHolder = ActivityHolder.getInstance();
+        mInterstitialAd = new InterstitialAd(activityHolder.getCurrentActivity());
         mInterstitialAd.setAdUnitId(tag);
     }
 

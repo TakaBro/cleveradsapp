@@ -1,11 +1,10 @@
-package com.example.cleveradsapp.controller.loader.crazy;
+package com.example.cleveradsapp.loader.crazy;
 
-import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.cleveradsapp.controller.loader.Cascade;
-import com.example.cleveradsapp.controller.loader.CascadeListener;
+import com.example.cleveradsapp.loader.Cascade;
+import com.example.cleveradsapp.loader.CascadeListener;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 
@@ -19,7 +18,6 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
     protected int loadedAdIndex = -1;
     protected int currentAdIndex = 0;
     protected Handler handler = new Handler();
-    protected Activity activity;
     protected CascadeListener listener;
     protected AbstractCrazyCascadeState currentState;
     protected CrazyCascadeReadyState readyState = new CrazyCascadeReadyState(this);
@@ -29,15 +27,14 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
     protected CrazyCascadeWaitToRetryState waitToRetryState = new CrazyCascadeWaitToRetryState(this);
     protected CrazyCascadePausedWaitToRetryState pausedWaitToRetryState = new CrazyCascadePausedWaitToRetryState(this);
 
-    public CrazyCascade(Activity activity) {
+    public CrazyCascade() {
         Log.d(LOG_TAG, "CrazyCascade instance created");
-        this.activity = activity;
         currentState = readyState;
     }
 
     @Override
-    public void loadAd(Activity activity) {
-        currentState.loadAd(activity);
+    public void loadAd() {
+        currentState.loadAd();
     }
 
     public void pause() {
@@ -57,7 +54,7 @@ public class CrazyCascade implements Cascade, NetworkAdLoadListener {
         currentAdIndex = 0;
         currentState.cancelWaitAndLoadAd();
         currentState = readyState;
-        loadAd(activity);
+        loadAd();
     }
 
     @Override

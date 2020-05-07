@@ -1,6 +1,6 @@
-package com.example.cleveradsapp.controller.loader.crazy;
+package com.example.cleveradsapp.loader.crazy;
 
-import com.example.cleveradsapp.controller.loader.CascadeListener;
+import com.example.cleveradsapp.loader.CascadeListener;
 
 public class CrazyCascadePausedReadyState extends AbstractCrazyCascadeState {
 

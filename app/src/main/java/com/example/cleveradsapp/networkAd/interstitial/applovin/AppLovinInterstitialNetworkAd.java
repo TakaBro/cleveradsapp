@@ -1,6 +1,5 @@
 package com.example.cleveradsapp.networkAd.interstitial.applovin;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.applovin.adview.AppLovinInterstitialAd;
@@ -11,7 +10,7 @@ import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinSdk;
-import com.example.cleveradsapp.CleverAdsPlugin;
+import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
@@ -21,24 +20,24 @@ public class AppLovinInterstitialNetworkAd implements AppLovinAdLoadListener, Ap
 
     private String LOGTAG = "TestAds_AppLovinAds";
     private String tag, net;
-    private Activity activity;
     private NetworkAdLoadListener loaderListener;
     private NetworkAdPresenterListener presenterListener;
     private AppLovinAd loadedAd;
     private AppLovinInterstitialAdDialog interstitialAd;
+    private ActivityHolder activityHolder;
 
     public AppLovinInterstitialNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                         NetworkAdPresenterListener p_Listener, Activity activity) {
+                                         NetworkAdPresenterListener p_Listener) {
         this.tag = tag;
         this.net = net;
-        this.activity = activity;
         this.loaderListener = l_listener;
         this.presenterListener = p_Listener;
+        activityHolder = ActivityHolder.getInstance();
     }
 
     @Override
     public void request() {
-        AppLovinSdk.getInstance( CleverAdsPlugin.getCurrentActivity() )
+        AppLovinSdk.getInstance( activityHolder.getCurrentActivity() )
                 .getAdService().loadNextAd( AppLovinAdSize.INTERSTITIAL,
                 AppLovinInterstitialNetworkAd.this);
     }
@@ -46,8 +45,8 @@ public class AppLovinInterstitialNetworkAd implements AppLovinAdLoadListener, Ap
     @Override
     public void show() {
         Log.d(LOGTAG, "APPLOVIN show()");
-        interstitialAd = AppLovinInterstitialAd.create( AppLovinSdk.getInstance( CleverAdsPlugin.getCurrentActivity() ),
-                CleverAdsPlugin.getCurrentActivity() );
+        interstitialAd = AppLovinInterstitialAd.create( AppLovinSdk.getInstance( activityHolder.getCurrentActivity() ),
+                activityHolder.getCurrentActivity() );
         interstitialAd.setAdDisplayListener(this);
         interstitialAd.setAdClickListener(this);
         interstitialAd.show();

@@ -1,12 +1,9 @@
-package com.example.cleveradsapp.controller.loader.simple;
+package com.example.cleveradsapp.loader.simple;
 
-import android.app.Activity;
 import android.util.Log;
 
-import com.example.cleveradsapp.controller.loader.Cascade;
-import com.example.cleveradsapp.controller.loader.CascadeListener;
-
-import java.util.LinkedHashMap;
+import com.example.cleveradsapp.loader.Cascade;
+import com.example.cleveradsapp.loader.CascadeListener;
 
 public class SimpleCascade implements Cascade {
     /*@Override
@@ -14,12 +11,12 @@ public class SimpleCascade implements Cascade {
 
     }*/
 
-    public SimpleCascade(LinkedHashMap<String, String> tags, int adType, Activity act) {
+    public SimpleCascade() {
         Log.d("TestAds_SimpleCascade", "SimpleCascade instance created");
     }
 
     @Override
-    public void loadAd(Activity act) {
+    public void loadAd() {
 
     }
 

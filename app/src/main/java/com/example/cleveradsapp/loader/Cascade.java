@@ -1,6 +1,5 @@
-package com.example.cleveradsapp.controller.loader;
+package com.example.cleveradsapp.loader;
 
-import android.app.Activity;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ public interface Cascade {
 
     ArrayList<NetworkAd> networkAdsList = new ArrayList<NetworkAd>();
 
-    void loadAd(Activity act);
+    void loadAd();
 
     void pause();
 

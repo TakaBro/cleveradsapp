@@ -1,7 +1,6 @@
-package com.example.cleveradsapp.controller.loader.crazy;
+package com.example.cleveradsapp.loader.crazy;
 
-import android.app.Activity;
-import com.example.cleveradsapp.controller.loader.CascadeListener;
+import com.example.cleveradsapp.loader.CascadeListener;
 
 public class CrazyCascadeReadyState extends AbstractCrazyCascadeState {
 
@@ -12,7 +11,7 @@ public class CrazyCascadeReadyState extends AbstractCrazyCascadeState {
     }
 
     @Override
-    public void loadAd(Activity activity) {
+    public void loadAd() {
         requestAd(logTag);
     }
 

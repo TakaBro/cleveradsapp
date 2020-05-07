@@ -1,4 +1,4 @@
-package com.example.cleveradsapp.controller.loader.crazy;
+package com.example.cleveradsapp.loader.crazy;
 
 public interface CrazyCascadeState {
 

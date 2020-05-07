@@ -7,8 +7,6 @@ import java.util.LinkedHashMap;
 import android.os.Bundle;
 import android.view.View;
 
-import static java.lang.Thread.sleep;
-
 public class MainActivity extends AppCompatActivity {
 
     CleverAdsPlugin cleverAdsPlugin;

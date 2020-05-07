@@ -1,8 +1,6 @@
-package com.example.cleveradsapp.controller.loader.crazy;
+package com.example.cleveradsapp.loader.crazy;
 
-import android.app.Activity;
-
-import com.example.cleveradsapp.controller.loader.CascadeListener;
+import com.example.cleveradsapp.loader.CascadeListener;
 
 public class CrazyCascadeWaitToRetryState extends AbstractCrazyCascadeState {
 
@@ -23,7 +21,7 @@ public class CrazyCascadeWaitToRetryState extends AbstractCrazyCascadeState {
     }
 
     @Override
-    public void loadAd(Activity act) {
+    public void loadAd() {
 
     }
 

@@ -1,9 +1,8 @@
 package com.example.cleveradsapp.networkAd.interstitial.unityads;
 
-import android.app.Activity;
 import android.util.Log;
 
-import com.example.cleveradsapp.CleverAdsPlugin;
+import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
@@ -14,9 +13,9 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
 
     private String TAG = "TestAds_UnityAds";
     private String tag, net;
-    private Activity activity;
     private NetworkAdLoadListener loaderListener;
     private NetworkAdPresenterListener presenterListener;
+    private ActivityHolder activityHolder;
 
     private String unityGameID = "1675872";
     private boolean testMode = true;
@@ -25,13 +24,13 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
     //private String TAG = "UnityAds";
 
     public UnityInterstitialNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                      NetworkAdPresenterListener p_Listener, Activity activity) {
+                                      NetworkAdPresenterListener p_Listener) {
         Log.d(TAG, "UnityInterstitialNetworkAd instance created");
         this.tag = tag;
         this.net = net;
-        this.activity = activity;
         this.loaderListener = l_listener;
         this.presenterListener = p_Listener;
+        activityHolder = ActivityHolder.getInstance();
     }
 
     @Override
@@ -40,13 +39,13 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
         // Declare a new UNITY listener:
         final IUnityAdsListener myAdsListener = UnityInterstitialNetworkAd.this;
         // Initialize the UNITY SDK:
-        UnityAds.initialize(CleverAdsPlugin.getCurrentActivity(), unityGameID, myAdsListener, testMode);
+        UnityAds.initialize(activityHolder.getCurrentActivity(), unityGameID, myAdsListener, testMode);
     }
 
     @Override
     public void show() {
         if (UnityAds.isReady (placementId)) {
-            UnityAds.show (CleverAdsPlugin.getCurrentActivity(), placementId);
+            UnityAds.show (activityHolder.getCurrentActivity(), placementId);
             Log.d(TAG, "UNITY AD SHOW");
         } else {
             Log.d(TAG, "UNITY AD CAN`T SHOW");

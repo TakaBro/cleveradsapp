@@ -1,4 +1,4 @@
-package com.example.cleveradsapp.controller;
+package com.example.cleveradsapp.controller.interstitial;
 
 import com.example.cleveradsapp.networkAd.NetworkAd;
 

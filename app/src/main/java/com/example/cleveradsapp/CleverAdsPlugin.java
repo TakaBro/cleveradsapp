@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.applovin.sdk.AppLovinSdk;
+import com.example.cleveradsapp.controller.Controller;
 import com.example.cleveradsapp.controller.ControllerFactory;
-import com.example.cleveradsapp.controller.InterstitialController;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -22,22 +22,21 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 
-public class CleverAdsPlugin implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
+public class CleverAdsPlugin implements LifecycleObserver {
 
     private String LOGTAG = "TestAds_CleverAdsPlugin";
-    //private static Activity currentActivity;
-    private static WeakReference<Activity> currentActivity;
     private Boolean firstExecution = true;
-    private InterstitialController interstitialController;
+    private Controller controller;
     private ControllerFactory controllerFactory;
+    private ActivityHolder activityHolder;
 
     public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, Activity activity) {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-        //currentActivity = activity;
-        currentActivity = new WeakReference<>(activity);
+        activityHolder = ActivityHolder.getInstance();
+        activityHolder.setCurrentActivity(activity);
         initializeSDKs(activity);
         controllerFactory = new ControllerFactory();
-        interstitialController = controllerFactory.createController(poolTags, adType, activity);
+        controller = controllerFactory.createController(poolTags, adType);
     }
 
     public void initializeSDKs(Activity activity) {
@@ -55,11 +54,7 @@ public class CleverAdsPlugin implements Application.ActivityLifecycleCallbacks, 
 
     public void showInsterstitialAd() {
         Log.d(LOGTAG, "Trying to show ad ...");
-        interstitialController.showAd();
-    }
-
-    public static Activity getCurrentActivity() {
-        return currentActivity.get();
+        controller.showAd();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -68,48 +63,12 @@ public class CleverAdsPlugin implements Application.ActivityLifecycleCallbacks, 
         if (firstExecution) {
             firstExecution = false;
         }else {
-            interstitialController.resume();
+            controller.resume();
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onEnterBackground() {
         Log.d(LOGTAG, "App in BACKGROUND");
-        interstitialController.pause();
-    }
-
-    @Override
-    public void onActivityResumed(@NonNull Activity activity) {
-        //currentActivity = activity;
-        currentActivity = new WeakReference<>(activity);
-    }
-
-    @Override
-    public void onActivityPaused(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public void onActivityStarted(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public void onActivityStopped(@NonNull Activity activity) {
-
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
-    }
-
-    @Override
-    public void onActivityDestroyed(@NonNull Activity activity) {
-
+        controller.pause();
     }
 }

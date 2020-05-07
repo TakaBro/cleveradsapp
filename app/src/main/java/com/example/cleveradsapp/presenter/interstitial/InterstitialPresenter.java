@@ -1,9 +1,9 @@
-package com.example.cleveradsapp.controller.presenter.interstitial;
+package com.example.cleveradsapp.presenter.interstitial;
 
 import android.util.Log;
 
-import com.example.cleveradsapp.controller.presenter.Presenter;
-import com.example.cleveradsapp.controller.presenter.PresenterListener;
+import com.example.cleveradsapp.presenter.Presenter;
+import com.example.cleveradsapp.presenter.PresenterListener;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
 
