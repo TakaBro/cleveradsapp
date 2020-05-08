@@ -1,6 +1,8 @@
-package com.example.cleveradsapp.networkAd.interstitial.admob;
+package com.example.cleveradsapp.networkAd.standard.admob;
 
+import android.app.Activity;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.networkAd.NetworkAd;
@@ -8,51 +10,54 @@ import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
-public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd {
+public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
 
     private String LOGTAG = "TestAds_AdmobAds";
     private String tag, net;
     private NetworkAdLoadListener loaderListener;
     private NetworkAdPresenterListener presenterListener;
-    private InterstitialAd mInterstitialAd;
+    private AdView mAdView;
     private AdListener adListener;
     private ActivityHolder activityHolder;
 
-    public AdMobInterstitialNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                      NetworkAdPresenterListener p_Listener) {
+    public AdMobStandardNetworkAd(/*String tag, String net, NetworkAdLoadListener l_listener,
+                                      NetworkAdPresenterListener p_Listener*/ Activity activity, LinearLayout adContainer) {
         this.tag = tag;
         this.net = net;
-        this.loaderListener = l_listener;
-        this.presenterListener = p_Listener;
-        this.adListener = AdMobInterstitialNetworkAd.this;
-        activityHolder = ActivityHolder.getInstance();
-        mInterstitialAd = new InterstitialAd(activityHolder.getCurrentActivity());
-        mInterstitialAd.setAdUnitId(tag);
+        /*this.loaderListener = l_listener;
+        this.presenterListener = p_Listener;*/
+        this.adListener = AdMobStandardNetworkAd.this;
+        //activityHolder = ActivityHolder.getInstance();
+        mAdView = new AdView(activity);
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        adContainer.addView(mAdView);
     }
 
     @Override
     public void request() {
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        listenerAdMobInterstitial();
+        mAdView.loadAd(new AdRequest.Builder().build());
+        //listenerAdMobStandard();
     }
 
     @Override
     public void show() {
         Log.d(LOGTAG, "AdMob show()");
-        mInterstitialAd.show();
+        //mAdView.show();
     }
 
     @Override
     public void onAdLoaded() {
-        Log.d(LOGTAG, "AdMob Interstitial LOADED"); // Code to be executed when an ad finishes loading.
-        loaderListener.adLoaded(AdMobInterstitialNetworkAd.this);
+        Log.d(LOGTAG, "AdMob Standard LOADED"); // Code to be executed when an ad finishes loading.
+        loaderListener.adLoaded(AdMobStandardNetworkAd.this);
     }
 
     @Override
     public void onAdFailedToLoad(int errorCode) {
-        Log.d(LOGTAG, "AdMob Interstitial FAILED TO LOAD"); // Code to be executed when an ad request fails.
+        Log.d(LOGTAG, "AdMob Standard FAILED TO LOAD"); // Code to be executed when an ad request fails.
 
         switch (errorCode) {
             case 0:
@@ -90,14 +95,14 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
 
     @Override
     public void onAdClosed() {
-        presenterListener.adClosed(); // Code to be executed when the interstitial ad is closed.
+        presenterListener.adClosed(); // Code to be executed when the standard ad is closed.
     }
 
     public String getTag() { return this.tag; }
 
     public String getNet() { return this.net; }
 
-    public void listenerAdMobInterstitial() {
-        mInterstitialAd.setAdListener(adListener);
+    public void listenerAdMobStandard() {
+        mAdView.setAdListener(adListener);
     }
 }

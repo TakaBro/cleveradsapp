@@ -1,6 +1,8 @@
 package com.example.cleveradsapp.loader.crazy;
 
 import android.util.Log;
+
+import com.example.cleveradsapp.loader.CascadeState;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 
 public abstract class AbstractCrazyCascadeState implements CascadeState {

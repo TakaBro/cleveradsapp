@@ -19,7 +19,6 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 
 public class CleverAdsPlugin implements LifecycleObserver {

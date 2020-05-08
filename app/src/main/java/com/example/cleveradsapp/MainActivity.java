@@ -6,6 +6,9 @@ import java.util.LinkedHashMap;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
+
+import com.example.cleveradsapp.networkAd.standard.admob.AdMobStandardNetworkAd;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Create a HashMap object for Tags
     LinkedHashMap<String, String> poolTags = new LinkedHashMap<String, String>();
+
+    LinearLayout adContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
         if(cleverAdsPlugin == null) {
             cleverAdsPlugin = new CleverAdsPlugin(poolTags, 1, this);
         }
+
+        /*adContainer = findViewById(R.id.banner_container);
+
+        AdMobStandardNetworkAd adMobStandardNetworkAd = new AdMobStandardNetworkAd(this,
+                adContainer);
+        adMobStandardNetworkAd.request();*/
     }
 
     public void showInterstitialAd(View view)
