@@ -3,6 +3,17 @@ package com.example.cleveradsapp.loader.simple;
 import com.example.cleveradsapp.loader.CascadeListener;
 
 public class SimpleCascadePausedWaitToRetryState extends AbstractSimpleCascadeState {
+
+    private String logTag = "TestAds_PausedWaitToRetryState";
+
+    @Override
+    public void resume() {
+        simpleCascade.currentState = simpleCascade.waitToRetryState;
+        if (simpleCascade.timeLimitEnded) {
+            requestAd(logTag);
+        }
+    }
+
     @Override
     public void onWaitFinished() {
 
@@ -15,11 +26,6 @@ public class SimpleCascadePausedWaitToRetryState extends AbstractSimpleCascadeSt
 
     @Override
     public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
 
     }
 

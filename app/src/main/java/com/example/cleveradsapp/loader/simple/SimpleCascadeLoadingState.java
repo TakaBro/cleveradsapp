@@ -1,31 +1,39 @@
 package com.example.cleveradsapp.loader.simple;
 
+import android.util.Log;
+
 import com.example.cleveradsapp.loader.CascadeListener;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 
-public class SimpleCascadePausedLoadingState extends AbstractSimpleCascadeState {
+public class SimpleCascadeLoadingState extends AbstractSimpleCascadeState {
 
-    private String logTag = "TestAds_PausedLoadingState";
+    private String logTag = "TestAds_LoadingState";
 
     @Override
     public void onAdLoaded(NetworkAd ad) {
+        Log.d(logTag, "onAdLoaded(ad)");
         simpleCascade.currentAdIndex = 0;
-        simpleCascade.loadedAd = ad;
+        simpleCascade.listener.adLoaded(ad);
+        simpleCascade.currentState = simpleCascade.waitToRetryState;
+        waitAndLoadAd(logTag);
     }
 
     @Override
     public void onAdFailedToLoad() {
+        Log.d(logTag, "onAdFailedLoaded()");
         simpleCascade.currentAdIndex++;
+        if (simpleCascade.currentAdIndex == networkAdsList.size()) {
+            simpleCascade.currentAdIndex=0;
+            simpleCascade.currentState = simpleCascade.waitToRetryState;
+            waitAndLoadAd(logTag);
+        } else {
+            requestAd(logTag);
+        }
     }
 
     @Override
-    public void resume() {
-        if (simpleCascade.loadedAd != null) {
-            simpleCascade.listener.adLoaded(simpleCascade.loadedAd);
-            simpleCascade.currentState = simpleCascade.waitToRetryState;
-            simpleCascade.loadedAd = null;
-            waitAndLoadAd(logTag);
-        }
+    public void pause() {
+        simpleCascade.currentState = simpleCascade.pausedLoadingState;
     }
 
     @Override
@@ -39,7 +47,7 @@ public class SimpleCascadePausedLoadingState extends AbstractSimpleCascadeState 
     }
 
     @Override
-    public void pause() {
+    public void resume() {
 
     }
 

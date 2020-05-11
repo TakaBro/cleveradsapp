@@ -23,15 +23,15 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     private AdListener adListener;
     private ActivityHolder activityHolder;
 
-    public AdMobStandardNetworkAd(/*String tag, String net, NetworkAdLoadListener l_listener,
-                                      NetworkAdPresenterListener p_Listener*/ Activity activity, LinearLayout adContainer) {
+    public AdMobStandardNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
+                                  NetworkAdPresenterListener p_Listener, LinearLayout adContainer) {
         this.tag = tag;
         this.net = net;
-        /*this.loaderListener = l_listener;
-        this.presenterListener = p_Listener;*/
+        this.loaderListener = l_listener;
+        this.presenterListener = p_Listener;
         this.adListener = AdMobStandardNetworkAd.this;
-        //activityHolder = ActivityHolder.getInstance();
-        mAdView = new AdView(activity);
+        activityHolder = ActivityHolder.getInstance();
+        mAdView = new AdView(activityHolder.getCurrentActivity());
         mAdView.setAdSize(AdSize.BANNER);
         mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         adContainer.addView(mAdView);
@@ -40,7 +40,7 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     @Override
     public void request() {
         mAdView.loadAd(new AdRequest.Builder().build());
-        //listenerAdMobStandard();
+        listenerAdMobStandard();
     }
 
     @Override

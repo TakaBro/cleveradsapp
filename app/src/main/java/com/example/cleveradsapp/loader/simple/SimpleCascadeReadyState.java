@@ -3,6 +3,9 @@ package com.example.cleveradsapp.loader.simple;
 import com.example.cleveradsapp.loader.CascadeListener;
 
 public class SimpleCascadeReadyState extends AbstractSimpleCascadeState {
+
+    private String logTag = "TestAds_ReadyState";
+
     @Override
     public void onWaitFinished() {
 
@@ -10,12 +13,12 @@ public class SimpleCascadeReadyState extends AbstractSimpleCascadeState {
 
     @Override
     public void loadAd() {
-
+        requestAd(logTag);
     }
 
     @Override
     public void pause() {
-
+        simpleCascade.currentState = simpleCascade.pausedReadyState;
     }
 
     @Override

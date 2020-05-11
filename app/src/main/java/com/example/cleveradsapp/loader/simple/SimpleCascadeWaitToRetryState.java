@@ -3,6 +3,9 @@ package com.example.cleveradsapp.loader.simple;
 import com.example.cleveradsapp.loader.CascadeListener;
 
 public class SimpleCascadeWaitToRetryState extends AbstractSimpleCascadeState {
+
+    private String logTag = "TestAds_WaitToRetryState";
+
     @Override
     public void onWaitFinished() {
 

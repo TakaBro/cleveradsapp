@@ -1,16 +1,12 @@
 package com.example.cleveradsapp;
 
 import android.app.Activity;
-import android.app.Application;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.applovin.sdk.AppLovinSdk;
 import com.example.cleveradsapp.controller.Controller;

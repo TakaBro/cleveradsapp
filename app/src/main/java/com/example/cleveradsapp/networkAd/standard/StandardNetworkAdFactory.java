@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.cleveradsapp.loader.crazy.CrazyCascade;
 import com.example.cleveradsapp.loader.simple.SimpleCascade;
 import com.example.cleveradsapp.networkAd.NetworkAd;
+import com.example.cleveradsapp.networkAd.standard.admob.AdMobStandardNetworkAd;
 import com.example.cleveradsapp.presenter.Presenter;
 
 import java.util.LinkedHashMap;
@@ -25,7 +26,7 @@ public class StandardNetworkAdFactory {
         switch (net) {
             case "AdMob":
                 Log.d("TestAds_AdFactory", "AdMobNetworkAd created");
-                //ad = new AdMobInterstitialNetworkAd(tag, net, cascade, presenter);
+                //ad = new AdMobStandardNetworkAd(tag, net, cascade, presenter);
                 break;
             case "UnityAds":
                 Log.d("TestAds_AdFactory", "UnityAdsNetworkAd created");
