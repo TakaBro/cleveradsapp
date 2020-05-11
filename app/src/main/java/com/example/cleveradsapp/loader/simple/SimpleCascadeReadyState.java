@@ -6,6 +6,10 @@ public class SimpleCascadeReadyState extends AbstractSimpleCascadeState {
 
     private String logTag = "TestAds_ReadyState";
 
+    public SimpleCascadeReadyState(SimpleCascade simpleCascade) {
+        super(simpleCascade);
+    }
+
     @Override
     public void onWaitFinished() {
 

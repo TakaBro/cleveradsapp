@@ -1,6 +1,7 @@
 package com.example.cleveradsapp.controller.standard;
 
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.controller.Controller;
 import com.example.cleveradsapp.loader.CascadeListener;
@@ -20,11 +21,11 @@ public class StandardController implements Controller, PresenterListener, Cascad
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
 
-    public StandardController(LinkedHashMap<String, String> tags) {
+    public StandardController(LinkedHashMap<String, String> tags, LinearLayout adContainer) {
         setupCascade(this);
         setupPresenter(this);
         standardNetworkAdFactory = new StandardNetworkAdFactory();
-        createNetworkAds(tags);
+        createNetworkAds(tags, adContainer);
         loadAd();
     }
 
@@ -38,10 +39,10 @@ public class StandardController implements Controller, PresenterListener, Cascad
         cascade.addListener(listener);
     }
 
-    public void createNetworkAds(LinkedHashMap<String, String> tags) {
+    public void createNetworkAds(LinkedHashMap<String, String> tags, LinearLayout adContainer) {
         for (int tagsIndex = 0; tagsIndex < tags.size(); tagsIndex++) {
             cascade.networkAdsList.add(standardNetworkAdFactory.createStandardNetworkAd(
-                    tags, tagsIndex, cascade, presenter));
+                    tags, tagsIndex, cascade, presenter, adContainer));
         }
     }
 
@@ -65,6 +66,12 @@ public class StandardController implements Controller, PresenterListener, Cascad
 
     @Override
     public void showAd() {
+        if (adLoaded != null) {
+            Log.d(LOGTAG, "Show Standard Ad");
+            presenter.showAd(adLoaded);
+        } else {
+            Log.d(LOGTAG, "Standard Ad is NULL");
+        }
     }
 
     //PresenterListener

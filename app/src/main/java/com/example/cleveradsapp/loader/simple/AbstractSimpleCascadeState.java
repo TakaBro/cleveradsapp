@@ -2,6 +2,7 @@ package com.example.cleveradsapp.loader.simple;
 
 import android.util.Log;
 
+import com.example.cleveradsapp.loader.CascadeListener;
 import com.example.cleveradsapp.loader.CascadeState;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 
@@ -9,6 +10,10 @@ public abstract class AbstractSimpleCascadeState implements CascadeState {
 
     protected SimpleCascade simpleCascade;
     protected Runnable r;
+
+    public AbstractSimpleCascadeState(SimpleCascade simpleCascade) {
+        this.simpleCascade = simpleCascade;
+    }
 
     protected void requestAd(String logTag) {
         simpleCascade.currentState = simpleCascade.loadingState;
@@ -27,6 +32,31 @@ public abstract class AbstractSimpleCascadeState implements CascadeState {
             }
         };
         simpleCascade.handler.postDelayed(r, simpleCascade.TIME_LIMIT);
+    }
+
+    @Override
+    public void loadAd() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void reset() {
+
+    }
+
+    @Override
+    public void addListener(CascadeListener cascadeListener) {
+
     }
 
     public void onAdLoaded(NetworkAd ad) {}

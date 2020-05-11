@@ -1,12 +1,14 @@
 package com.example.cleveradsapp.networkAd.standard;
 
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.loader.crazy.CrazyCascade;
 import com.example.cleveradsapp.loader.simple.SimpleCascade;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.standard.admob.AdMobStandardNetworkAd;
 import com.example.cleveradsapp.presenter.Presenter;
+import com.example.cleveradsapp.presenter.standard.StandardPresenter;
 
 import java.util.LinkedHashMap;
 
@@ -15,10 +17,9 @@ public class StandardNetworkAdFactory {
     String tag, net;
     NetworkAd ad;
 
-    public NetworkAd createStandardNetworkAd(LinkedHashMap<String,String> tags,
-                                                 int tagsIndex,
-                                                 SimpleCascade cascade,
-                                                 Presenter presenter) {
+    public NetworkAd createStandardNetworkAd(LinkedHashMap<String,String> tags, int tagsIndex,
+                                             SimpleCascade cascade, StandardPresenter presenter,
+                                             LinearLayout adContainer) {
 
         tag = tags.keySet().toArray()[tagsIndex].toString();
         net = tags.get(tags.keySet().toArray()[tagsIndex]);
@@ -26,7 +27,7 @@ public class StandardNetworkAdFactory {
         switch (net) {
             case "AdMob":
                 Log.d("TestAds_AdFactory", "AdMobNetworkAd created");
-                //ad = new AdMobStandardNetworkAd(tag, net, cascade, presenter);
+                ad = new AdMobStandardNetworkAd(tag, net, cascade, presenter, adContainer);
                 break;
             case "UnityAds":
                 Log.d("TestAds_AdFactory", "UnityAdsNetworkAd created");

@@ -6,6 +6,10 @@ public class SimpleCascadeWaitToRetryState extends AbstractSimpleCascadeState {
 
     private String logTag = "TestAds_WaitToRetryState";
 
+    public SimpleCascadeWaitToRetryState(SimpleCascade simpleCascade) {
+        super(simpleCascade);
+    }
+
     @Override
     public void onWaitFinished() {
 

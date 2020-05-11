@@ -74,7 +74,7 @@ public class InterstitialController implements Controller, PresenterListener, Ca
         } else if(UnityAds.isReady ("video")) {
             UnityAds.show(activityHolder.getCurrentActivity(), "video");
         } else {
-            Log.d(LOGTAG, "Ad is NULL");
+            Log.d(LOGTAG, "Interstitial Ad is NULL");
         }
     }
 

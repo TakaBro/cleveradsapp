@@ -7,6 +7,10 @@ public class SimpleCascadePausedLoadingState extends AbstractSimpleCascadeState 
 
     private String logTag = "TestAds_PausedLoadingState";
 
+    public SimpleCascadePausedLoadingState(SimpleCascade simpleCascade) {
+        super(simpleCascade);
+    }
+
     @Override
     public void onAdLoaded(NetworkAd ad) {
         simpleCascade.currentAdIndex = 0;

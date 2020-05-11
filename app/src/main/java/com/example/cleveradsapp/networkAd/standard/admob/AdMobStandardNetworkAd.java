@@ -1,6 +1,5 @@
 package com.example.cleveradsapp.networkAd.standard.admob;
 
-import android.app.Activity;
 import android.util.Log;
 import android.widget.LinearLayout;
 
@@ -21,6 +20,7 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     private NetworkAdPresenterListener presenterListener;
     private AdView mAdView;
     private AdListener adListener;
+    private LinearLayout adContainer;
     private ActivityHolder activityHolder;
 
     public AdMobStandardNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
@@ -30,11 +30,11 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
         this.loaderListener = l_listener;
         this.presenterListener = p_Listener;
         this.adListener = AdMobStandardNetworkAd.this;
+        this.adContainer = adContainer;
         activityHolder = ActivityHolder.getInstance();
         mAdView = new AdView(activityHolder.getCurrentActivity());
         mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        adContainer.addView(mAdView);
+        mAdView.setAdUnitId(tag);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     @Override
     public void show() {
         Log.d(LOGTAG, "AdMob show()");
-        //mAdView.show();
+        adContainer.addView(mAdView);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class CleverAdsPluginConfiguration {
     }
 
     public void fillPoolTags() {
-        fillInterstitialPoolTags();
+        //fillInterstitialPoolTags();
         fillStandardPoolTags();
     }
 

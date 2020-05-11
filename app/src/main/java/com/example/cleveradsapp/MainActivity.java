@@ -2,13 +2,9 @@ package com.example.cleveradsapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.LinkedHashMap;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import com.example.cleveradsapp.networkAd.standard.admob.AdMobStandardNetworkAd;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,11 +16,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        adContainer = findViewById(R.id.banner_container);
 
         if(cleverAdsPlugin == null) {
             cleverAdsConfig = new CleverAdsPluginConfiguration();
-            cleverAdsPlugin = new CleverAdsPlugin(cleverAdsConfig.getInterstitialPoolTags(),
-                    cleverAdsConfig.getType(), this);
+            cleverAdsPlugin = new CleverAdsPlugin(cleverAdsConfig.getstandardPoolTags(),
+                    cleverAdsConfig.getType(), adContainer,  this);
         }
 
         /*adContainer = findViewById(R.id.banner_container);
@@ -34,8 +31,11 @@ public class MainActivity extends AppCompatActivity {
         adMobStandardNetworkAd.request();*/
     }
 
-    public void showInterstitialAd(View view)
-    {
+    public void showInterstitialAd(View view) {
         cleverAdsPlugin.showInsterstitialAd();
+    }
+
+    public void showStandardAd(View view) {
+        cleverAdsPlugin.showStandardAd();
     }
 }

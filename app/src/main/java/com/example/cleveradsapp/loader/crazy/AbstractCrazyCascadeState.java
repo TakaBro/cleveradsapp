@@ -8,8 +8,8 @@ import com.example.cleveradsapp.networkAd.NetworkAd;
 
 public abstract class AbstractCrazyCascadeState implements CascadeState {
 
-    protected static CrazyCascade crazyCascade;
-    protected static Runnable r;
+    protected CrazyCascade crazyCascade;
+    protected Runnable r;
 
     public AbstractCrazyCascadeState(CrazyCascade crazyCascade) {
         this.crazyCascade = crazyCascade;

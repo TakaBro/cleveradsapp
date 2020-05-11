@@ -2,6 +2,7 @@ package com.example.cleveradsapp;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -25,13 +26,13 @@ public class CleverAdsPlugin implements LifecycleObserver {
     private ControllerFactory controllerFactory;
     private ActivityHolder activityHolder;
 
-    public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, Activity activity) {
+    public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, LinearLayout adContainer, Activity activity) {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         activityHolder = ActivityHolder.getInstance();
         activityHolder.setCurrentActivity(activity);
         initializeSDKs(activity);
         controllerFactory = new ControllerFactory();
-        controller = controllerFactory.createController(poolTags, adType);
+        controller = controllerFactory.createController(poolTags, adType, adContainer);
     }
 
     public void initializeSDKs(Activity activity) {
@@ -47,8 +48,13 @@ public class CleverAdsPlugin implements LifecycleObserver {
         unityAdNet.initializeUnitySDK(activity);*/
     }
 
+    public void showStandardAd() {
+        Log.d(LOGTAG, "Trying to show standard ad ...");
+        controller.showAd();
+    }
+
     public void showInsterstitialAd() {
-        Log.d(LOGTAG, "Trying to show ad ...");
+        Log.d(LOGTAG, "Trying to show interstitial ad ...");
         controller.showAd();
     }
 

@@ -19,12 +19,12 @@ public class SimpleCascade implements Cascade, NetworkAdLoadListener {
     protected Handler handler = new Handler();
     protected CascadeListener listener;
     protected AbstractSimpleCascadeState currentState;
-    protected SimpleCascadeReadyState readyState = new SimpleCascadeReadyState();
-    protected SimpleCascadePausedReadyState pausedReadyState= new SimpleCascadePausedReadyState();
-    protected SimpleCascadeLoadingState loadingState = new SimpleCascadeLoadingState();
-    protected SimpleCascadePausedLoadingState pausedLoadingState = new SimpleCascadePausedLoadingState();
-    protected SimpleCascadeWaitToRetryState waitToRetryState = new SimpleCascadeWaitToRetryState();
-    protected SimpleCascadePausedWaitToRetryState pausedWaitToRetryState = new SimpleCascadePausedWaitToRetryState();
+    protected SimpleCascadeReadyState readyState = new SimpleCascadeReadyState(this);
+    protected SimpleCascadePausedReadyState pausedReadyState= new SimpleCascadePausedReadyState(this);
+    protected SimpleCascadeLoadingState loadingState = new SimpleCascadeLoadingState(this);
+    protected SimpleCascadePausedLoadingState pausedLoadingState = new SimpleCascadePausedLoadingState(this);
+    protected SimpleCascadeWaitToRetryState waitToRetryState = new SimpleCascadeWaitToRetryState(this);
+    protected SimpleCascadePausedWaitToRetryState pausedWaitToRetryState = new SimpleCascadePausedWaitToRetryState(this);
 
     public SimpleCascade() {
         Log.d("TestAds_SimpleCascade", "SimpleCascade instance created");

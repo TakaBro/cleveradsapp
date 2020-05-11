@@ -1,5 +1,7 @@
 package com.example.cleveradsapp.presenter.standard;
 
+import android.util.Log;
+
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
 import com.example.cleveradsapp.presenter.Presenter;
@@ -11,7 +13,8 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
 
     @Override
     public void showAd(NetworkAd ad) {
-
+        Log.d("TestAds_Presenter", "showAd");
+        ad.show();
     }
 
     @Override

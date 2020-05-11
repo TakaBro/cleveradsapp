@@ -3,6 +3,11 @@ package com.example.cleveradsapp.loader.simple;
 import com.example.cleveradsapp.loader.CascadeListener;
 
 public class SimpleCascadePausedReadyState extends AbstractSimpleCascadeState {
+
+    public SimpleCascadePausedReadyState(SimpleCascade simpleCascade) {
+        super(simpleCascade);
+    }
+
     @Override
     public void onWaitFinished() {
 

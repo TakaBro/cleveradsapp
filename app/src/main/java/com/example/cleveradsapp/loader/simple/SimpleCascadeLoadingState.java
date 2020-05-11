@@ -9,6 +9,10 @@ public class SimpleCascadeLoadingState extends AbstractSimpleCascadeState {
 
     private String logTag = "TestAds_LoadingState";
 
+    public SimpleCascadeLoadingState(SimpleCascade simpleCascade) {
+        super(simpleCascade);
+    }
+
     @Override
     public void onAdLoaded(NetworkAd ad) {
         Log.d(logTag, "onAdLoaded(ad)");
