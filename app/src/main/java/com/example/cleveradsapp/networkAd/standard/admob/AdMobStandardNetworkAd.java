@@ -46,6 +46,7 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     @Override
     public void show() {
         Log.d(LOGTAG, "AdMob show()");
+        adContainer.removeAllViews();
         adContainer.addView(mAdView);
     }
 

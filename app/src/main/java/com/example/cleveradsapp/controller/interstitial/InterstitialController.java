@@ -91,6 +91,11 @@ public class InterstitialController implements Controller, PresenterListener, Ca
         cascade.reset();
     }
 
+    @Override
+    public void refreshAd() {
+
+    }
+
     //CascadeListener
     @Override
     public void adLoaded(NetworkAd ad) {

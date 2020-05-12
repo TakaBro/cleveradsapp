@@ -20,7 +20,7 @@ public class SimpleCascadePausedWaitToRetryState extends AbstractSimpleCascadeSt
 
     @Override
     public void onWaitFinished() {
-
+        simpleCascade.timeLimitEnded = true;
     }
 
     @Override

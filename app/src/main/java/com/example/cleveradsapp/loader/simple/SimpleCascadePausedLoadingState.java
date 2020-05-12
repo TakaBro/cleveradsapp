@@ -20,6 +20,11 @@ public class SimpleCascadePausedLoadingState extends AbstractSimpleCascadeState 
     @Override
     public void onAdFailedToLoad() {
         simpleCascade.currentAdIndex++;
+        if (simpleCascade.currentAdIndex == networkAdsList.size()) {
+            simpleCascade.currentAdIndex=0;
+            simpleCascade.currentState = simpleCascade.pausedWaitToRetryState;
+            waitAndLoadAd(logTag);
+        }
     }
 
     @Override
@@ -29,7 +34,10 @@ public class SimpleCascadePausedLoadingState extends AbstractSimpleCascadeState 
             simpleCascade.currentState = simpleCascade.waitToRetryState;
             simpleCascade.loadedAd = null;
             waitAndLoadAd(logTag);
+        }else {
+            simpleCascade.currentState = simpleCascade.loadingState;
         }
+
     }
 
     @Override

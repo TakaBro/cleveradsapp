@@ -11,11 +11,6 @@ public class SimpleCascadeReadyState extends AbstractSimpleCascadeState {
     }
 
     @Override
-    public void onWaitFinished() {
-
-    }
-
-    @Override
     public void loadAd() {
         requestAd(logTag);
     }
@@ -37,6 +32,11 @@ public class SimpleCascadeReadyState extends AbstractSimpleCascadeState {
 
     @Override
     public void addListener(CascadeListener cascadeListener) {
+
+    }
+
+    @Override
+    public void onWaitFinished() {
 
     }
 }

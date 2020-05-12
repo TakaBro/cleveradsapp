@@ -21,14 +21,9 @@ public class MainActivity extends AppCompatActivity {
         if(cleverAdsPlugin == null) {
             cleverAdsConfig = new CleverAdsPluginConfiguration();
             cleverAdsPlugin = new CleverAdsPlugin(cleverAdsConfig.getstandardPoolTags(),
-                    cleverAdsConfig.getType(), adContainer,  this);
+                    cleverAdsConfig.getAdType(), cleverAdsConfig.getAdWaitTimeLimit(),
+                    adContainer, this);
         }
-
-        /*adContainer = findViewById(R.id.banner_container);
-
-        AdMobStandardNetworkAd adMobStandardNetworkAd = new AdMobStandardNetworkAd(this,
-                adContainer);
-        adMobStandardNetworkAd.request();*/
     }
 
     public void showInterstitialAd(View view) {

@@ -4,4 +4,6 @@ public interface PresenterListener {
     void adOpened();
 
     void adClosed();
+
+    void refreshAd();
 }

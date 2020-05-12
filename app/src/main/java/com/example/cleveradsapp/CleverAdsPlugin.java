@@ -26,13 +26,14 @@ public class CleverAdsPlugin implements LifecycleObserver {
     private ControllerFactory controllerFactory;
     private ActivityHolder activityHolder;
 
-    public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, LinearLayout adContainer, Activity activity) {
+    public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, long adWaitTimeLimit,
+                           LinearLayout adContainer, Activity activity) {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         activityHolder = ActivityHolder.getInstance();
         activityHolder.setCurrentActivity(activity);
         initializeSDKs(activity);
         controllerFactory = new ControllerFactory();
-        controller = controllerFactory.createController(poolTags, adType, adContainer);
+        controller = controllerFactory.createController(poolTags, adType, adWaitTimeLimit, adContainer);
     }
 
     public void initializeSDKs(Activity activity) {

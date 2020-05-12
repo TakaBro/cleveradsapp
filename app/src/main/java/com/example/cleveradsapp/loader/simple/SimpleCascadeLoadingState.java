@@ -18,8 +18,9 @@ public class SimpleCascadeLoadingState extends AbstractSimpleCascadeState {
         Log.d(logTag, "onAdLoaded(ad)");
         simpleCascade.currentAdIndex = 0;
         simpleCascade.listener.adLoaded(ad);
-        simpleCascade.currentState = simpleCascade.waitToRetryState;
-        waitAndLoadAd(logTag);
+        simpleCascade.currentState = simpleCascade.readyState;
+        /*simpleCascade.currentState = simpleCascade.waitToRetryState;
+        waitAndLoadAd(logTag);*/
     }
 
     @Override

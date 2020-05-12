@@ -31,7 +31,7 @@ public abstract class AbstractSimpleCascadeState implements CascadeState {
                 simpleCascade.currentState.onWaitFinished();
             }
         };
-        simpleCascade.handler.postDelayed(r, simpleCascade.TIME_LIMIT);
+        simpleCascade.handler.postDelayed(r, simpleCascade.adWaitTimeLimit);
     }
 
     @Override

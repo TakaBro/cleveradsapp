@@ -5,6 +5,4 @@ public interface NetworkAdPresenterListener {
     void adOpened();
 
     void adClosed();
-
-
 }

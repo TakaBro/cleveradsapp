@@ -11,8 +11,7 @@ import com.example.cleveradsapp.networkAd.NetworkAdLoadListener;
 public class SimpleCascade implements Cascade, NetworkAdLoadListener {
 
     private String LOG_TAG = "TestAds_SimpleCascade";
-    protected long TIME_LIMIT = 5000;
-
+    protected long adWaitTimeLimit;
     protected NetworkAd loadedAd = null;
     protected boolean timeLimitEnded = false;
     protected int currentAdIndex = 0;
@@ -26,9 +25,10 @@ public class SimpleCascade implements Cascade, NetworkAdLoadListener {
     protected SimpleCascadeWaitToRetryState waitToRetryState = new SimpleCascadeWaitToRetryState(this);
     protected SimpleCascadePausedWaitToRetryState pausedWaitToRetryState = new SimpleCascadePausedWaitToRetryState(this);
 
-    public SimpleCascade() {
+    public SimpleCascade(long adWaitTimeLimit) {
         Log.d("TestAds_SimpleCascade", "SimpleCascade instance created");
         currentState = readyState;
+        this.adWaitTimeLimit = adWaitTimeLimit;
     }
 
     @Override

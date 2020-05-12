@@ -12,12 +12,12 @@ public class ControllerFactory {
 
     Controller controller;
 
-    public Controller createController(LinkedHashMap<String, String> tags, int adType, LinearLayout adContainer) {
+    public Controller createController(LinkedHashMap<String, String> tags, int adType, long adWaitTimeLimit, LinearLayout adContainer) {
         //0 standard, 1 interstitial and 2 rewarded
         switch (adType) {
             case 0:
                 Log.d("TestAds_ControlFactory", "Standard Controller created");
-                controller = new StandardController(tags, adContainer);
+                controller = new StandardController(tags, adWaitTimeLimit, adContainer);
                 break;
             case 1:
                 Log.d("TestAds_ControlFactory", "Interstitial Controller created");

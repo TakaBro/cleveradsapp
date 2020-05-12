@@ -10,7 +10,8 @@ public class CleverAdsPluginConfiguration {
     // Create a HashMap object for Interstital Tags
     private LinkedHashMap<String, String> interstitialPoolTags = new LinkedHashMap<String, String>();
 
-    private int type;
+    private int adType;
+    private long adWaitTimeLimit = 5000;
 
     public CleverAdsPluginConfiguration() {
         fillPoolTags();
@@ -24,7 +25,7 @@ public class CleverAdsPluginConfiguration {
     public void fillStandardPoolTags() {
         standardPoolTags.put("ca-app-pub-4452499906520493/1234567890", "AdMob");            //error
         standardPoolTags.put("ca-app-pub-3940256099942544/6300978111", "AdMob");            //test
-        type = 0;
+        adType = 0;
     }
 
     public void fillInterstitialPoolTags() {
@@ -32,7 +33,7 @@ public class CleverAdsPluginConfiguration {
         interstitialPoolTags.put("ca-app-pub-3940256099942544/1033173712", "AdMob");            //test
         interstitialPoolTags.put("1675872-video", "UnityAds");                                  //unityads
         interstitialPoolTags.put("ca-app-pub-5073389895475742/8102108072", "AdMob-AppLovin");   //mediation
-        type = 1;
+        adType = 1;
     }
 
     public LinkedHashMap<String, String> getstandardPoolTags() {
@@ -43,7 +44,12 @@ public class CleverAdsPluginConfiguration {
         return interstitialPoolTags;
     }
 
-    public int getType() {
-        return type;
+    public int getAdType() {
+        return adType;
     }
+
+    public long getAdWaitTimeLimit() {
+        return adWaitTimeLimit;
+    }
+
 }

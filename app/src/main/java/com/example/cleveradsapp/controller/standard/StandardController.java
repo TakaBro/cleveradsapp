@@ -21,22 +21,22 @@ public class StandardController implements Controller, PresenterListener, Cascad
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
 
-    public StandardController(LinkedHashMap<String, String> tags, LinearLayout adContainer) {
-        setupCascade(this);
-        setupPresenter(this);
+    public StandardController(LinkedHashMap<String, String> tags, long adWaitTimeLimit, LinearLayout adContainer) {
+        setupCascade(this, adWaitTimeLimit);
+        setupPresenter(this, adWaitTimeLimit);
         standardNetworkAdFactory = new StandardNetworkAdFactory();
         createNetworkAds(tags, adContainer);
         loadAd();
     }
 
-    public void setupPresenter(PresenterListener listener) {
-        presenter = new StandardPresenter();
-        presenter.addListener(listener);
+    public void setupCascade(CascadeListener listener, long adWaitTimeLimit) {
+        cascade = new SimpleCascade(adWaitTimeLimit);
+        cascade.addListener(listener);
     }
 
-    public void setupCascade(CascadeListener listener) {
-        cascade = new SimpleCascade();
-        cascade.addListener(listener);
+    public void setupPresenter(PresenterListener listener, long timeToRefreshAd) {
+        presenter = new StandardPresenter(8000);
+        presenter.addListener(listener);
     }
 
     public void createNetworkAds(LinkedHashMap<String, String> tags, LinearLayout adContainer) {
@@ -69,6 +69,8 @@ public class StandardController implements Controller, PresenterListener, Cascad
         if (adLoaded != null) {
             Log.d(LOGTAG, "Show Standard Ad");
             presenter.showAd(adLoaded);
+            //cascade.reset();
+            cascade.loadAd();
         } else {
             Log.d(LOGTAG, "Standard Ad is NULL");
         }
@@ -85,6 +87,11 @@ public class StandardController implements Controller, PresenterListener, Cascad
         Log.d(LOGTAG, "Ad Closed and Reset Cascade");
         adLoaded = null;
         cascade.reset();
+    }
+
+    @Override
+    public void refreshAd() {
+        Log.d(LOGTAG, "time to refresh Ad");
     }
 
     //CascadeListener

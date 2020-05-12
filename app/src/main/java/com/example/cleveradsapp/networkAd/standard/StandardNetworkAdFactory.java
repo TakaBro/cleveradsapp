@@ -3,11 +3,9 @@ package com.example.cleveradsapp.networkAd.standard;
 import android.util.Log;
 import android.widget.LinearLayout;
 
-import com.example.cleveradsapp.loader.crazy.CrazyCascade;
 import com.example.cleveradsapp.loader.simple.SimpleCascade;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.standard.admob.AdMobStandardNetworkAd;
-import com.example.cleveradsapp.presenter.Presenter;
 import com.example.cleveradsapp.presenter.standard.StandardPresenter;
 
 import java.util.LinkedHashMap;
