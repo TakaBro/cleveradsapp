@@ -12,16 +12,16 @@ public class SimpleCascadeWaitToRetryState extends AbstractSimpleCascadeState {
 
     @Override
     public void onWaitFinished() {
-
-    }
-
-    @Override
-    public void loadAd() {
-
+        requestAd(logTag);
     }
 
     @Override
     public void pause() {
+        simpleCascade.currentState = simpleCascade.pausedWaitToRetryState;
+    }
+
+    @Override
+    public void loadAd() {
 
     }
 

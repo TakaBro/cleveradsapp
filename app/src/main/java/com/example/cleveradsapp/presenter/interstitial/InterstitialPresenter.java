@@ -19,7 +19,7 @@ public class InterstitialPresenter implements Presenter, NetworkAdPresenterListe
 
     @Override
     public void adOpened() {
-
+        listener.adOpened();
     }
 
     @Override

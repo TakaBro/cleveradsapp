@@ -16,8 +16,7 @@ public class StandardNetworkAdFactory {
     NetworkAd ad;
 
     public NetworkAd createStandardNetworkAd(LinkedHashMap<String,String> tags, int tagsIndex,
-                                             SimpleCascade cascade, StandardPresenter presenter,
-                                             LinearLayout adContainer) {
+                                             SimpleCascade cascade, StandardPresenter presenter) {
 
         tag = tags.keySet().toArray()[tagsIndex].toString();
         net = tags.get(tags.keySet().toArray()[tagsIndex]);
@@ -25,7 +24,7 @@ public class StandardNetworkAdFactory {
         switch (net) {
             case "AdMob":
                 Log.d("TestAds_AdFactory", "AdMobNetworkAd created");
-                ad = new AdMobStandardNetworkAd(tag, net, cascade, presenter, adContainer);
+                ad = new AdMobStandardNetworkAd(tag, net, cascade, presenter);
                 break;
             case "UnityAds":
                 Log.d("TestAds_AdFactory", "UnityAdsNetworkAd created");

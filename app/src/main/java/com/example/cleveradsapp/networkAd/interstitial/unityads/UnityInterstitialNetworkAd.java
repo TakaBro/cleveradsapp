@@ -1,6 +1,7 @@
 package com.example.cleveradsapp.networkAd.interstitial.unityads;
 
 import android.util.Log;
+import android.view.View;
 
 import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.networkAd.NetworkAd;
@@ -60,6 +61,11 @@ public class UnityInterstitialNetworkAd implements NetworkAd, IUnityAdsListener{
     @Override
     public String getNet() {
         return this.net;
+    }
+
+    @Override
+    public View getView() {
+        return null;
     }
 
     // Implement the IUnityAdsListener interface methods:

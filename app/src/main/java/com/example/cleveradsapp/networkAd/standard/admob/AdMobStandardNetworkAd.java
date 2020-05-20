@@ -1,6 +1,7 @@
 package com.example.cleveradsapp.networkAd.standard.admob;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.ActivityHolder;
@@ -18,36 +19,38 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     private String tag, net;
     private NetworkAdLoadListener loaderListener;
     private NetworkAdPresenterListener presenterListener;
-    private AdView mAdView;
+    private AdView AdView;
     private AdListener adListener;
     private LinearLayout adContainer;
     private ActivityHolder activityHolder;
 
     public AdMobStandardNetworkAd(String tag, String net, NetworkAdLoadListener l_listener,
-                                  NetworkAdPresenterListener p_Listener, LinearLayout adContainer) {
+                                  NetworkAdPresenterListener p_Listener) {
         this.tag = tag;
         this.net = net;
         this.loaderListener = l_listener;
         this.presenterListener = p_Listener;
         this.adListener = AdMobStandardNetworkAd.this;
-        this.adContainer = adContainer;
         activityHolder = ActivityHolder.getInstance();
-        mAdView = new AdView(activityHolder.getCurrentActivity());
-        mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId(tag);
+        AdView = new AdView(activityHolder.getCurrentActivity());
+        AdView.setAdSize(AdSize.BANNER);
+        AdView.setAdUnitId(tag);
     }
 
     @Override
     public void request() {
-        mAdView.loadAd(new AdRequest.Builder().build());
+        AdView.loadAd(new AdRequest.Builder().build());
         listenerAdMobStandard();
+    }
+
+    @Override
+    public AdView getView() {
+        return AdView;
     }
 
     @Override
     public void show() {
         Log.d(LOGTAG, "AdMob show()");
-        adContainer.removeAllViews();
-        adContainer.addView(mAdView);
     }
 
     @Override
@@ -104,6 +107,6 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
     public String getNet() { return this.net; }
 
     public void listenerAdMobStandard() {
-        mAdView.setAdListener(adListener);
+        AdView.setAdListener(adListener);
     }
 }

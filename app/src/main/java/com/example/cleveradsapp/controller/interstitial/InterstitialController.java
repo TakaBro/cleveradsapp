@@ -1,6 +1,7 @@
 package com.example.cleveradsapp.controller.interstitial;
 
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.controller.Controller;
@@ -15,6 +16,7 @@ import com.unity3d.ads.UnityAds;
 import java.util.LinkedHashMap;
 
 public class InterstitialController implements Controller, PresenterListener, CascadeListener {
+
     private String LOGTAG = "TestAds_Controller";
     private NetworkAd adLoaded;
     private CrazyCascade cascade;
@@ -89,11 +91,6 @@ public class InterstitialController implements Controller, PresenterListener, Ca
         Log.d(LOGTAG, "Ad Closed and Reset Cascade");
         adLoaded = null;
         cascade.reset();
-    }
-
-    @Override
-    public void refreshAd() {
-
     }
 
     //CascadeListener

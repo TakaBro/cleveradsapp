@@ -6,26 +6,25 @@ import android.widget.LinearLayout;
 import com.example.cleveradsapp.controller.Controller;
 import com.example.cleveradsapp.loader.CascadeListener;
 import com.example.cleveradsapp.loader.simple.SimpleCascade;
-import com.example.cleveradsapp.presenter.PresenterListener;
 import com.example.cleveradsapp.presenter.standard.StandardPresenter;
 import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.standard.StandardNetworkAdFactory;
+import com.example.cleveradsapp.presenter.standard.StandardPresenterListener;
 
 import java.util.LinkedHashMap;
 
-public class StandardController implements Controller, PresenterListener, CascadeListener  {
+public class StandardController implements Controller, StandardPresenterListener, CascadeListener {
 
     private String LOGTAG = "TestAds_Controller";
-    private NetworkAd adLoaded;
     private SimpleCascade cascade;
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
 
-    public StandardController(LinkedHashMap<String, String> tags, long adWaitTimeLimit, LinearLayout adContainer) {
+    public StandardController(LinkedHashMap<String, String> tags, long adWaitTimeLimit) {
         setupCascade(this, adWaitTimeLimit);
         setupPresenter(this, adWaitTimeLimit);
         standardNetworkAdFactory = new StandardNetworkAdFactory();
-        createNetworkAds(tags, adContainer);
+        createNetworkAds(tags);
         loadAd();
     }
 
@@ -34,16 +33,41 @@ public class StandardController implements Controller, PresenterListener, Cascad
         cascade.addListener(listener);
     }
 
-    public void setupPresenter(PresenterListener listener, long timeToRefreshAd) {
+    public void setupPresenter(StandardPresenterListener listener, long timeToRefreshAd) {
         presenter = new StandardPresenter(8000);
         presenter.addListener(listener);
     }
 
-    public void createNetworkAds(LinkedHashMap<String, String> tags, LinearLayout adContainer) {
+    public void createNetworkAds(LinkedHashMap<String, String> tags) {
         for (int tagsIndex = 0; tagsIndex < tags.size(); tagsIndex++) {
             cascade.networkAdsList.add(standardNetworkAdFactory.createStandardNetworkAd(
-                    tags, tagsIndex, cascade, presenter, adContainer));
+                    tags, tagsIndex, cascade, presenter));
         }
+    }
+
+    public void onContainerAppeared(LinearLayout adContainer) {
+        presenter.onContainerAppeared(adContainer);
+        cascade.loadAd();
+    }
+
+    public void onContainerDisappeared() {
+        Log.d(LOGTAG, "Hide Standard Ad");
+        presenter.onContainerDisappeared();
+    }
+
+    @Override
+    public void showAd() {
+/*        if (containerAd != null) {
+            Log.d(LOGTAG, "Show Container Ad");
+            presenter.show(containerAd, adContainer);
+            cascade.loadAd();
+        } else if (loadedAd != null){
+            Log.d(LOGTAG, "Show Loaded Ad");
+            presenter.show(loadedAd, adContainer);
+            cascade.loadAd();
+        } else {
+            Log.d(LOGTAG, "Standard Ad is NULL");
+        }*/
     }
 
     @Override
@@ -56,42 +80,33 @@ public class StandardController implements Controller, PresenterListener, Cascad
     public void pause() {
         Log.d(LOGTAG, "Pause Cascade");
         cascade.pause();
+        presenter.pause();
     }
 
     @Override
     public void resume() {
         Log.d(LOGTAG, "Continue Cascade");
         cascade.resume();
-    }
-
-    @Override
-    public void showAd() {
-        if (adLoaded != null) {
-            Log.d(LOGTAG, "Show Standard Ad");
-            presenter.showAd(adLoaded);
-            //cascade.reset();
-            cascade.loadAd();
-        } else {
-            Log.d(LOGTAG, "Standard Ad is NULL");
-        }
+        presenter.resume();
     }
 
     //PresenterListener
     @Override
     public void adOpened() {
-
+        //containerAd = loadedAd;
     }
 
     @Override
     public void adClosed() {
-        Log.d(LOGTAG, "Ad Closed and Reset Cascade");
-        adLoaded = null;
-        cascade.reset();
+        Log.d(LOGTAG, "Ad Closed");
+        presenter.adClosed();
     }
 
+    //StandardPresenterListener
     @Override
-    public void refreshAd() {
+    public void onAdPresentationFinished(LinearLayout adContainer) {
         Log.d(LOGTAG, "time to refresh Ad");
+        cascade.reset();
     }
 
     //CascadeListener
@@ -99,7 +114,7 @@ public class StandardController implements Controller, PresenterListener, Cascad
     public void adLoaded(NetworkAd ad) {
         Log.d(LOGTAG, "Ad Loaded");
         Log.d(LOGTAG, "--------------------------------------");
-        adLoaded = ad;
+        presenter.adLoaded(ad);
     }
 
     @Override

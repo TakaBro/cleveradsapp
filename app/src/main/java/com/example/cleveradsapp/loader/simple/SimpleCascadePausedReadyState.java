@@ -9,6 +9,11 @@ public class SimpleCascadePausedReadyState extends AbstractSimpleCascadeState {
     }
 
     @Override
+    public void resume() {
+        simpleCascade.currentState = simpleCascade.readyState;
+    }
+
+    @Override
     public void onWaitFinished() {
 
     }
@@ -20,11 +25,6 @@ public class SimpleCascadePausedReadyState extends AbstractSimpleCascadeState {
 
     @Override
     public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.cleveradsapp.networkAd.interstitial.admob;
 
 import android.util.Log;
+import android.view.View;
 
 import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.networkAd.NetworkAd;
@@ -14,8 +15,8 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
 
     private String LOGTAG = "TestAds_AdmobAds";
     private String tag, net;
-    private NetworkAdLoadListener loaderListener;
-    private NetworkAdPresenterListener presenterListener;
+    private NetworkAdLoadListener adLoadListener;
+    private NetworkAdPresenterListener adPresentionListener;
     private InterstitialAd mInterstitialAd;
     private AdListener adListener;
     private ActivityHolder activityHolder;
@@ -24,8 +25,8 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
                                       NetworkAdPresenterListener p_Listener) {
         this.tag = tag;
         this.net = net;
-        this.loaderListener = l_listener;
-        this.presenterListener = p_Listener;
+        this.adLoadListener = l_listener;
+        this.adPresentionListener = p_Listener;
         this.adListener = AdMobInterstitialNetworkAd.this;
         activityHolder = ActivityHolder.getInstance();
         mInterstitialAd = new InterstitialAd(activityHolder.getCurrentActivity());
@@ -47,7 +48,7 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
     @Override
     public void onAdLoaded() {
         Log.d(LOGTAG, "AdMob Interstitial LOADED"); // Code to be executed when an ad finishes loading.
-        loaderListener.adLoaded(AdMobInterstitialNetworkAd.this);
+        adLoadListener.adLoaded(AdMobInterstitialNetworkAd.this);
     }
 
     @Override
@@ -70,12 +71,12 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
             default:
                 Log.d(LOGTAG, "--------------------------------------");
         }
-        loaderListener.adFailedToLoad();
+        adLoadListener.adFailedToLoad();
     }
 
     @Override
     public void onAdOpened() {
-        presenterListener.adOpened(); // Code to be executed when the ad is displayed.
+        adPresentionListener.adOpened(); // Code to be executed when the ad is displayed.
     }
 
     @Override
@@ -90,12 +91,17 @@ public class AdMobInterstitialNetworkAd extends AdListener implements NetworkAd 
 
     @Override
     public void onAdClosed() {
-        presenterListener.adClosed(); // Code to be executed when the interstitial ad is closed.
+        adPresentionListener.adClosed(); // Code to be executed when the interstitial ad is closed.
     }
 
     public String getTag() { return this.tag; }
 
     public String getNet() { return this.net; }
+
+    @Override
+    public View getView() {
+        return null;
+    }
 
     public void listenerAdMobInterstitial() {
         mInterstitialAd.setAdListener(adListener);

@@ -1,39 +1,45 @@
 package com.example.cleveradsapp;
 
 import android.app.Activity;
+import android.app.Application;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.applovin.sdk.AppLovinSdk;
-import com.example.cleveradsapp.controller.Controller;
 import com.example.cleveradsapp.controller.ControllerFactory;
+import com.example.cleveradsapp.controller.interstitial.InterstitialController;
+import com.example.cleveradsapp.controller.standard.StandardController;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 
-public class CleverAdsPlugin implements LifecycleObserver {
+public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityLifecycleCallbacks, Serializable {
 
     private String LOGTAG = "TestAds_CleverAdsPlugin";
     private Boolean firstExecution = true;
-    private Controller controller;
+    private StandardController standardController;
+    private InterstitialController interstitialController;
     private ControllerFactory controllerFactory;
-    private ActivityHolder activityHolder;
 
     public CleverAdsPlugin(LinkedHashMap<String, String> poolTags, int adType, long adWaitTimeLimit,
-                           LinearLayout adContainer, Activity activity) {
+                           Activity activity) {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-        activityHolder = ActivityHolder.getInstance();
-        activityHolder.setCurrentActivity(activity);
+        ActivityHolder.getInstance().setCurrentActivity(activity);
         initializeSDKs(activity);
         controllerFactory = new ControllerFactory();
-        controller = controllerFactory.createController(poolTags, adType, adWaitTimeLimit, adContainer);
+        standardController = controllerFactory.createStandardController(poolTags, adWaitTimeLimit);
+        //interstitialController = controllerFactory.createInterstitialController(poolTags);
     }
 
     public void initializeSDKs(Activity activity) {
@@ -49,14 +55,20 @@ public class CleverAdsPlugin implements LifecycleObserver {
         unityAdNet.initializeUnitySDK(activity);*/
     }
 
-    public void showStandardAd() {
+    public void createController(LinkedHashMap<String, String> poolTags, int adType, long adWaitTimeLimit) {
+        controllerFactory.createController(poolTags, adType, adWaitTimeLimit);
+    }
+
+    public void enableStandardAd(LinearLayout adContainer) {
         Log.d(LOGTAG, "Trying to show standard ad ...");
-        controller.showAd();
+        //interstitialController.showAd();
+        standardController.onContainerAppeared(adContainer);
     }
 
     public void showInsterstitialAd() {
         Log.d(LOGTAG, "Trying to show interstitial ad ...");
-        controller.showAd();
+//        interstitialController.showAd();
+        standardController.showAd();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -65,12 +77,56 @@ public class CleverAdsPlugin implements LifecycleObserver {
         if (firstExecution) {
             firstExecution = false;
         }else {
-            controller.resume();
+//            interstitialController.resume();
+            standardController.resume();
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onEnterBackground() {
         Log.d(LOGTAG, "App in BACKGROUND");
-        controller.pause();
+//        interstitialController.pause();
+        standardController.pause();
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        if(ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
+            Log.d(LOGTAG, "This Activity contains banner_container!");
+            standardController.onContainerAppeared((LinearLayout)ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container));
+        } else {
+            standardController.onContainerDisappeared();
+        }
+        Log.d(LOGTAG, "onActivityResumed" + activity.toString());
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+        Log.d(LOGTAG, "onActivityPaused: " + activity.toString());
+//        standardController.onContainerDisappeared();
+    }
+
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(LOGTAG, "onActivityCreated: " + activity.toString());
+    }
+
+    @Override
+    public void onActivityStarted(@NonNull Activity activity) {
+        Log.d(LOGTAG, "onActivityStarted: " + activity.toString());
+    }
+
+    @Override
+    public void onActivityStopped(@NonNull Activity activity) {
+        Log.d(LOGTAG, "onActivityStopped: " + activity.toString());
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(@NonNull Activity activity) {
+
     }
 }

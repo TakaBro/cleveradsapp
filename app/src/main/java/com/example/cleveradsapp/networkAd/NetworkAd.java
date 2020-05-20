@@ -1,5 +1,7 @@
 package com.example.cleveradsapp.networkAd;
 
+import android.view.View;
+
 public interface NetworkAd {
 
     void request();
@@ -9,4 +11,6 @@ public interface NetworkAd {
     String getTag();
 
     String getNet();
+
+    View getView();
 }

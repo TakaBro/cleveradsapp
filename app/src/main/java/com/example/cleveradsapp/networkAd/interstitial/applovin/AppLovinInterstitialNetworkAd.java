@@ -1,6 +1,7 @@
 package com.example.cleveradsapp.networkAd.interstitial.applovin;
 
 import android.util.Log;
+import android.view.View;
 
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
@@ -60,6 +61,11 @@ public class AppLovinInterstitialNetworkAd implements AppLovinAdLoadListener, Ap
     @Override
     public String getNet() {
         return this.net;
+    }
+
+    @Override
+    public View getView() {
+        return null;
     }
 
     @Override

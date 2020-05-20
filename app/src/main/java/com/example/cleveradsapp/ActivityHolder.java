@@ -35,26 +35,30 @@ public class ActivityHolder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         activityHolder_instance.currentActivity = activity;
-    }
-
-    @Override
-    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
+        /*if(currentActivity.findViewById(R.id.banner_container) != null) {
+            Log.d("TestAds_ActivityHolder", "This Activity contains banner_container!");
+        }
+        Log.d("TestAds_ActivityHolder", "onActivityResumed: " + activity.toString());*/
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
+//        Log.d("TestAds_ActivityHolder", "onActivityStarted: " + activity.toString());
+    }
 
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+//        Log.d("TestAds_ActivityHolder", "onActivityCreated: " + activity.toString());
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
+//        Log.d("TestAds_ActivityHolder", "onActivityPaused: " + activity.toString());
     }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-
+//        Log.d("TestAds_ActivityHolder", "onActivityStopped: " + activity.toString());
     }
 
     @Override
