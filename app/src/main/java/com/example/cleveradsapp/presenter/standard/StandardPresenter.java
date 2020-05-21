@@ -16,88 +16,48 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
     protected Handler handler = new Handler();
     protected long startTime, elapsedTime, timeToAdPresentationFinish;
     protected long remainingTime = 0;
-    protected NetworkAd loadedAd = null;
-    protected NetworkAd currentAd = null;
-    protected LinearLayout adContainer;
+    protected NetworkAd ad;
+    public LinearLayout adContainer;
     protected StandardPresenterState currentState;
 
     public StandardPresenter(long timeToAdPresentationFinish) {
         this.timeToAdPresentationFinish = timeToAdPresentationFinish;
-        currentState = StandardPresenterState.BLOCKED;
-        currentState.GetPresenter(this);
+        currentState = StandardPresenterState.DISABLED;
+        currentState.setPresenter(this);
     }
 
-    public void onContainerAppeared(LinearLayout adContainer) {
+    public void enable() {
+        Log.d(LOG_TAG, "Enable Standard Ad");
+        currentState.enable();
+    }
+
+    public void startPresentation(NetworkAd ad, LinearLayout adContainer) {
+        Log.d("TestAds_Presenter", "startPresentation");
         this.adContainer = adContainer;
-        if (currentAd != null) {
-            Log.d(LOG_TAG, "Show Container Ad");
-            show(currentAd, adContainer);
-        } else if (loadedAd != null){
-            Log.d(LOG_TAG, "Show Loaded Ad");
-            show(loadedAd, adContainer);
-        } else {
-            Log.d(LOG_TAG, "Standard Ad is NULL");
-        }
+        this.ad = ad;
+        currentState.startPresentation();
     }
 
-    public void onContainerDisappeared() {
-        Log.d(LOG_TAG, "Hide Standard Ad");
-        currentState.hide();
-    }
-
-    public void show(NetworkAd ad, LinearLayout adContainerParam) {
-        Log.d("TestAds_Presenter", "show Ad");
-        currentAd = ad;
-        adContainer = adContainerParam;
-        currentState.show();
-    }
-
-/*    public void runAdPresentationTimer() {
-        startTime = System.nanoTime();
-        checkAdPresentationTime();
-    }
-
-    public void checkAdPresentationTime() {
-        if(remainingTime != 0) {
-            waitAdPresentationFinish(remainingTime);
-            remainingTime = 0;
-        } else {
-            waitAdPresentationFinish(timeToAdPresentationFinish);
-        }
-    }
-
-    public void waitAdPresentationFinish(long timeToRefreshAdParameter) {
-        Log.d(LOG_TAG, "waiting to refresh Ad...");
-        r = new Runnable() {
-            @Override
-            public void run() {
-                listener.onAdPresentationFinished(adContainer);
-            }
-        };
-        handler.postDelayed(r, timeToRefreshAdParameter);
-    }*/
-
-    public void hide() {
-        Log.d("TestAds_Presenter", "hide Ad");
-        currentState.hide();
-/*        saveAdPresentationTime();
-        handler.removeCallbacks(r);
-        adContainer.removeAllViews();*/
+    public void resumePresentation(NetworkAd ad, LinearLayout adContainer) {
+        Log.d("TestAds_Presenter", "resumePresentation");
+        this.adContainer = adContainer;
+        this.ad = ad;
+        currentState.resumePresentation();
     }
 
     public void pause() {
-        currentState.pause();
+        currentState.pausePresentation();
 //        elapsedTime = System.nanoTime()-startTime;
 //        handler.removeCallbacks(r);
     }
 
     public void resume() {
-        currentState.resume();
-//        if(timeToRefreshAd >= elapsedTime) {
-//            waitToRefreshAd(timeToRefreshAd - elapsedTime);
-//        } else {
-//
-//        }
+//        currentState.resume();
+        /*if(timeToRefreshAd >= elapsedTime) {
+            waitToRefreshAd(timeToRefreshAd - elapsedTime);
+        } else {
+
+        }*/
     }
 
     @Override
@@ -107,7 +67,7 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
 
     @Override
     public void adClosed() {
-        currentAd = loadedAd;
+
     }
 
     public void addListener(StandardPresenterListener listener) {
@@ -117,10 +77,5 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
     @Override
     public void showAd(NetworkAd ad) {
 
-    }
-
-    public void adLoaded(NetworkAd ad) {
-        loadedAd = ad;
-        //check if needs to show ad
     }
 }

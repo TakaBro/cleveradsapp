@@ -61,14 +61,12 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
 
     public void enableStandardAd(LinearLayout adContainer) {
         Log.d(LOGTAG, "Trying to show standard ad ...");
-        //interstitialController.showAd();
-        standardController.onContainerAppeared(adContainer);
+        standardController.enableStandardAd();
     }
 
     public void showInsterstitialAd() {
         Log.d(LOGTAG, "Trying to show interstitial ad ...");
-//        interstitialController.showAd();
-        standardController.showAd();
+        interstitialController.showAd();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -102,7 +100,7 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
         Log.d(LOGTAG, "onActivityPaused: " + activity.toString());
-//        standardController.onContainerDisappeared();
+        standardController.onContainerDisappeared();
     }
 
     @Override

@@ -4,141 +4,165 @@ import android.util.Log;
 
 public enum StandardPresenterState {
 
-/*    ENABLE {
+    DISABLED {
         @Override
-        void show() {
-            Log.d(LOG_TAG, "show ad");
-            presenter.currentState = StandardPresenterState.RUNNING;
-            presenter.adContainer.removeAllViews();
-            presenter.adContainer.addView(presenter.ad.getView());
-            runAdPresentationTimer();
+        void enable() {
+            presenter.currentState = StandardPresenterState.BLOCKED;
         }
 
         @Override
-        void hide(String aParameter) {
+        void disable() {
 
         }
+
         @Override
-        void pause(String aParameter) {
+        void startPresentation() {
 
         }
+
         @Override
-        void resume(String aParameter) {
+        void resumePresentation() {
 
         }
-    },*/
+
+        @Override
+        void pausePresentation() {
+
+        }
+
+    },
     BLOCKED {
         @Override
-        void show() {
-            Log.d(LOG_TAG, "show ad");
+        void enable() {
+
+        }
+
+        @Override
+        void disable() {
+            presenter.currentState = StandardPresenterState.DISABLED;
+        }
+
+        @Override
+        void startPresentation() {
+            Log.d(LOG_TAG, "start ad presentation");
             presenter.currentState = StandardPresenterState.PRESENTING;
-            presenter.adContainer.removeAllViews();
-            presenter.adContainer.addView(presenter.currentAd.getView());
-            runAdPresentationTimer();
+            updateAdView();
+            startAdPresentationTimer();
         }
 
         @Override
-        void hide() {
-
+        void resumePresentation() {
+            Log.d(LOG_TAG, "resume ad presentation");
+            presenter.currentState = StandardPresenterState.PRESENTING;
+            updateAdView();
+            resumeAdPresentationTimer();
         }
 
         @Override
-        void pause() {
+        void pausePresentation() {
 
         }
 
-        @Override
-        void resume() {
-
-        }
     },
     PRESENTING {
         @Override
-        void show() {
+        void enable() {
 
         }
 
         @Override
-        void hide() {
+        void disable() {
+            presenter.currentState = StandardPresenterState.DISABLED;
+            saveAdPresentationTime();
+            removeAdFromContainer();
+        }
+
+        @Override
+        void startPresentation() {
+
+        }
+
+        @Override
+        void resumePresentation() {
+
+        }
+
+        @Override
+        void pausePresentation() {
             presenter.currentState = StandardPresenterState.BLOCKED;
             saveAdPresentationTime();
-            //removeAdFromContainer();
         }
 
-        @Override
-        void pause() {
-/*            presenter.currentState = StandardPresenterState.BLOCKED;
-            saveAdPresentationTime();
-            removeAdFromContainer();*/
-        }
-
-        @Override
-        void resume() {
-
-        }
-    },
-    PAUSED {
-        @Override
-        void show() {
-
-        }
-
-        @Override
-        void hide() {
-
-        }
-
-        @Override
-        void pause() {
-
-        }
-
-        @Override
-        void resume() {
-            presenter.currentState = StandardPresenterState.PRESENTING;
-        }
     };
 
     protected String LOG_TAG = "TestAds_StandardPresenterState";
     StandardPresenter presenter;
 
-    protected void GetPresenter(StandardPresenter presenter) {
+    protected void setPresenter(StandardPresenter presenter) {
         this.presenter = presenter;
     }
 
-    protected void runAdPresentationTimer() {
+    protected void updateAdView() {
+        presenter.adContainer.removeAllViews();
+        presenter.adContainer.addView(presenter.ad.getView());
+    }
+
+    protected void startAdPresentationTimer() {
         presenter.startTime = System.nanoTime();
-        checkAdPresentationTime();
+        waitAdPresentationFinish(presenter.timeToAdPresentationFinish);
     }
 
-    protected void checkAdPresentationTime() {
-        if(presenter.remainingTime != 0) {
-            waitAdPresentationFinish(presenter.remainingTime);
-            presenter.remainingTime = 0;
-        } else {
-            waitAdPresentationFinish(presenter.timeToAdPresentationFinish);
-        }
+    protected void resumeAdPresentationTimer() {
+        presenter.startTime = System.nanoTime();
+        waitAdPresentationFinish(presenter.remainingTime);
     }
 
-    protected void waitAdPresentationFinish(long timeToRefreshAdParameter) {
+    protected void waitAdPresentationFinish(long timeToAdPresentationFinish) {
         Log.d(LOG_TAG, "waiting to ad presentation finish...");
         presenter.r = new Runnable() {
             @Override
             public void run() {
                 presenter.listener.onAdPresentationFinished(presenter.adContainer);
-                //presenter.currentAd = presenter.loadedAd;
             }
         };
-        presenter.handler.postDelayed(presenter.r, timeToRefreshAdParameter);
+        presenter.handler.postDelayed(presenter.r, timeToAdPresentationFinish);
     }
 
     public void saveAdPresentationTime() {
-        /*elapsedTime = System.nanoTime() - startTime;
-        remainingTime = timeToAdPresentationFinish - elapsedTime;*/
+        presenter.elapsedTime = System.nanoTime() - presenter.startTime;
+        presenter.remainingTime = presenter.timeToAdPresentationFinish - presenter.elapsedTime;
     }
 
-    abstract void show();
-    abstract void hide();
-    abstract void pause();
-    abstract void resume();
+    public void removeAdFromContainer() {
+        presenter.adContainer.removeAllViews();
+    }
+
+    abstract void enable();
+    abstract void disable();
+    abstract void startPresentation();
+    abstract void resumePresentation();
+    abstract void pausePresentation();
+
+/*    enum  PresentationState {
+        RESUMING {
+            @Override
+            void addView() {
+                presenter.adContainer.addView(presenter.currentAd.getView());
+            }
+        },
+        EXPIRED {
+            @Override
+            void addView() {
+                presenter.adContainer.addView(presenter.loadedAd.getView());
+            }
+        };
+
+        StandardPresenter presenter;
+
+        protected void SetPresenter(StandardPresenter presenter) {
+            this.presenter = presenter;
+        }
+
+        abstract void addView();
+    }*/
 }

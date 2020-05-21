@@ -19,6 +19,8 @@ public class StandardController implements Controller, StandardPresenterListener
     private SimpleCascade cascade;
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
+    protected NetworkAd loadedAd = null;
+    protected NetworkAd presentedAd = null;
 
     public StandardController(LinkedHashMap<String, String> tags, long adWaitTimeLimit) {
         setupCascade(this, adWaitTimeLimit);
@@ -26,6 +28,10 @@ public class StandardController implements Controller, StandardPresenterListener
         standardNetworkAdFactory = new StandardNetworkAdFactory();
         createNetworkAds(tags);
         loadAd();
+    }
+
+    public void enableStandardAd() {
+        presenter.enable();
     }
 
     public void setupCascade(CascadeListener listener, long adWaitTimeLimit) {
@@ -46,28 +52,29 @@ public class StandardController implements Controller, StandardPresenterListener
     }
 
     public void onContainerAppeared(LinearLayout adContainer) {
-        presenter.onContainerAppeared(adContainer);
-        cascade.loadAd();
+        if (presentedAd != null) {
+            presenter.resumePresentation(presentedAd, adContainer);
+        } else if(loadedAd != null) {
+            presentedAd = loadedAd;
+            presenter.startPresentation(presentedAd, adContainer);
+            cascade.loadAd();
+        } else {
+            Log.d(LOGTAG, "Standard Ad is NULL");
+        }
     }
 
     public void onContainerDisappeared() {
-        Log.d(LOGTAG, "Hide Standard Ad");
-        presenter.onContainerDisappeared();
+        Log.d(LOGTAG, "Pause Standard Ad");
+        presenter.pause();
     }
 
     @Override
     public void showAd() {
-/*        if (containerAd != null) {
-            Log.d(LOGTAG, "Show Container Ad");
-            presenter.show(containerAd, adContainer);
-            cascade.loadAd();
-        } else if (loadedAd != null){
-            Log.d(LOGTAG, "Show Loaded Ad");
-            presenter.show(loadedAd, adContainer);
-            cascade.loadAd();
-        } else {
-            Log.d(LOGTAG, "Standard Ad is NULL");
-        }*/
+        enablePresentation();
+    }
+
+    public void enablePresentation() {
+
     }
 
     @Override
@@ -78,14 +85,14 @@ public class StandardController implements Controller, StandardPresenterListener
 
     @Override
     public void pause() {
-        Log.d(LOGTAG, "Pause Cascade");
+        Log.d(LOGTAG, "Pause Standard Ad");
         cascade.pause();
         presenter.pause();
     }
 
     @Override
     public void resume() {
-        Log.d(LOGTAG, "Continue Cascade");
+        Log.d(LOGTAG, "Continue Standard Ad");
         cascade.resume();
         presenter.resume();
     }
@@ -93,7 +100,6 @@ public class StandardController implements Controller, StandardPresenterListener
     //PresenterListener
     @Override
     public void adOpened() {
-        //containerAd = loadedAd;
     }
 
     @Override
@@ -106,7 +112,14 @@ public class StandardController implements Controller, StandardPresenterListener
     @Override
     public void onAdPresentationFinished(LinearLayout adContainer) {
         Log.d(LOGTAG, "time to refresh Ad");
-        cascade.reset();
+        //checks if has loaded ad
+        if(loadedAd != null) {
+            //show new ad and start loading another ad
+            presentedAd = loadedAd;
+            presenter.startPresentation(presentedAd, adContainer);
+            cascade.reset();
+            cascade.loadAd();
+        }
     }
 
     //CascadeListener
@@ -114,7 +127,12 @@ public class StandardController implements Controller, StandardPresenterListener
     public void adLoaded(NetworkAd ad) {
         Log.d(LOGTAG, "Ad Loaded");
         Log.d(LOGTAG, "--------------------------------------");
-        presenter.adLoaded(ad);
+        loadedAd = ad;
+        //check if needs to show ad
+        if (presentedAd == null) {
+            presentedAd = loadedAd;
+            presenter.startPresentation(presentedAd, presenter.adContainer);
+        }
     }
 
     @Override
