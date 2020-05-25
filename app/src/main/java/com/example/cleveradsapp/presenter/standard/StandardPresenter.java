@@ -21,14 +21,23 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
     protected StandardPresenterState currentState;
 
     public StandardPresenter(long timeToAdPresentationFinish) {
+        Log.d(LOG_TAG, "timeToAdPresentationFinish: " + timeToAdPresentationFinish);
         this.timeToAdPresentationFinish = timeToAdPresentationFinish;
-        currentState = StandardPresenterState.DISABLED;
-        currentState.setPresenter(this);
+        StandardPresenterState.DISABLED_PRESENTING.setPresenter(this);
+        StandardPresenterState.DISABLED_BLOCKED.setPresenter(this);
+        StandardPresenterState.BLOCKED.setPresenter(this);
+        StandardPresenterState.PRESENTING.setPresenter(this);
+        currentState = StandardPresenterState.DISABLED_BLOCKED;
     }
 
     public void enable() {
         Log.d(LOG_TAG, "Enable Standard Ad");
         currentState.enable();
+    }
+
+    public void disable() {
+        Log.d(LOG_TAG, "Disable Standard Ad");
+        currentState.disable();
     }
 
     public void startPresentation(NetworkAd ad, LinearLayout adContainer) {
@@ -45,19 +54,13 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
         currentState.resumePresentation();
     }
 
-    public void pause() {
+    public void pausePresentation() {
+        Log.d("TestAds_Presenter", "Pause Standard Ad");
         currentState.pausePresentation();
-//        elapsedTime = System.nanoTime()-startTime;
-//        handler.removeCallbacks(r);
     }
 
     public void resume() {
 //        currentState.resume();
-        /*if(timeToRefreshAd >= elapsedTime) {
-            waitToRefreshAd(timeToRefreshAd - elapsedTime);
-        } else {
-
-        }*/
     }
 
     @Override

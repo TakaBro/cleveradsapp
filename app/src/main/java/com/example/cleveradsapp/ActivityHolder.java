@@ -18,7 +18,7 @@ public class ActivityHolder implements Application.ActivityLifecycleCallbacks {
     }
 
     public static ActivityHolder getInstance() {
-        if (activityHolder_instance == null) {
+        if(activityHolder_instance == null) {
             activityHolder_instance = new ActivityHolder();
         }
         return activityHolder_instance;
@@ -35,10 +35,6 @@ public class ActivityHolder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         activityHolder_instance.currentActivity = activity;
-        /*if(currentActivity.findViewById(R.id.banner_container) != null) {
-            Log.d("TestAds_ActivityHolder", "This Activity contains banner_container!");
-        }
-        Log.d("TestAds_ActivityHolder", "onActivityResumed: " + activity.toString());*/
     }
 
     @Override

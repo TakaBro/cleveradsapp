@@ -55,7 +55,7 @@ public class AdMobStandardNetworkAd extends AdListener implements NetworkAd {
 
     @Override
     public void onAdLoaded() {
-        Log.d(LOGTAG, "AdMob Standard LOADED"); // Code to be executed when an ad finishes loading.
+        //Log.d(LOGTAG, "AdMob Standard LOADED"); // Code to be executed when an ad finishes loading.
         loaderListener.adLoaded(AdMobStandardNetworkAd.this);
     }
 

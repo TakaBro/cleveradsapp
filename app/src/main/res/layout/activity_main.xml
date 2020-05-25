@@ -6,28 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/buttonStandard"
+    <Switch
+        android:id="@+id/switchEnableStandard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="showStandardAd"
-        android:text="Standard"
+        android:text="Enable Standard "
+        android:onClick="onSwitchEnableStandardClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.401" />
+        app:layout_constraintVertical_bias="0.319" />
+
+    <!--<Button
+        android:id="@+id/buttonStandard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="goToBannerActivity"
+        android:text="Show Standard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.401" />-->
+
+    <Switch
+        android:id="@+id/switchContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSwitchContainerClicked"
+        android:text="Container "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.407" />
 
     <Button
         android:id="@+id/buttonInterstitial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="showInterstitialAd"
-        android:text="Interstitial"
+        android:text="Show Interstitial"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/banner_container"

@@ -24,11 +24,11 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
-public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityLifecycleCallbacks, Serializable {
+public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityLifecycleCallbacks {
 
     private String LOGTAG = "TestAds_CleverAdsPlugin";
     private Boolean firstExecution = true;
-    private StandardController standardController;
+    public StandardController standardController;
     private InterstitialController interstitialController;
     private ControllerFactory controllerFactory;
 
@@ -60,8 +60,13 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
     }
 
     public void enableStandardAd(LinearLayout adContainer) {
-        Log.d(LOGTAG, "Trying to show standard ad ...");
+        Log.d(LOGTAG, "Enable standard ad");
         standardController.enableStandardAd();
+    }
+
+    public void disableStandardAd() {
+        Log.d(LOGTAG, "Disable standard ad");
+        standardController.disableStandardAd();
     }
 
     public void showInsterstitialAd() {
@@ -91,16 +96,18 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
         if(ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
             Log.d(LOGTAG, "This Activity contains banner_container!");
             standardController.onContainerAppeared((LinearLayout)ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container));
-        } else {
+        }/* else {
             standardController.onContainerDisappeared();
-        }
+        }*/
         Log.d(LOGTAG, "onActivityResumed" + activity.toString());
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
+        if(ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
+            standardController.onContainerDisappeared();
+        }
         Log.d(LOGTAG, "onActivityPaused: " + activity.toString());
-        standardController.onContainerDisappeared();
     }
 
     @Override

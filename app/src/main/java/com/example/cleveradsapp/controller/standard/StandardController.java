@@ -19,8 +19,9 @@ public class StandardController implements Controller, StandardPresenterListener
     private SimpleCascade cascade;
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
+    private Boolean updateAd = false;
     protected NetworkAd loadedAd = null;
-    protected NetworkAd presentedAd = null;
+    protected NetworkAd presentationAd = null;
 
     public StandardController(LinkedHashMap<String, String> tags, long adWaitTimeLimit) {
         setupCascade(this, adWaitTimeLimit);
@@ -34,13 +35,17 @@ public class StandardController implements Controller, StandardPresenterListener
         presenter.enable();
     }
 
+    public void disableStandardAd() {
+        presenter.disable();
+    }
+
     public void setupCascade(CascadeListener listener, long adWaitTimeLimit) {
         cascade = new SimpleCascade(adWaitTimeLimit);
         cascade.addListener(listener);
     }
 
     public void setupPresenter(StandardPresenterListener listener, long timeToRefreshAd) {
-        presenter = new StandardPresenter(8000);
+        presenter = new StandardPresenter(10000);
         presenter.addListener(listener);
     }
 
@@ -52,20 +57,19 @@ public class StandardController implements Controller, StandardPresenterListener
     }
 
     public void onContainerAppeared(LinearLayout adContainer) {
-        if (presentedAd != null) {
-            presenter.resumePresentation(presentedAd, adContainer);
-        } else if(loadedAd != null) {
-            presentedAd = loadedAd;
-            presenter.startPresentation(presentedAd, adContainer);
-            cascade.loadAd();
+        Log.d(LOGTAG, "onContainerAppeared");
+        if (presentationAd != null) { // PRESENTING
+            presenter.resumePresentation(presentationAd, adContainer);
+        } else if(loadedAd != null) { // NOT STARTED
+            presenter.startPresentation(loadedAd, adContainer);
         } else {
             Log.d(LOGTAG, "Standard Ad is NULL");
         }
     }
 
     public void onContainerDisappeared() {
-        Log.d(LOGTAG, "Pause Standard Ad");
-        presenter.pause();
+        Log.d(LOGTAG, "onContainerDisappeared");
+        presenter.pausePresentation();
     }
 
     @Override
@@ -87,7 +91,7 @@ public class StandardController implements Controller, StandardPresenterListener
     public void pause() {
         Log.d(LOGTAG, "Pause Standard Ad");
         cascade.pause();
-        presenter.pause();
+        presenter.pausePresentation();
     }
 
     @Override
@@ -110,15 +114,19 @@ public class StandardController implements Controller, StandardPresenterListener
 
     //StandardPresenterListener
     @Override
+    public void onAdPresentationStarted() {
+        presentationAd = loadedAd;
+        cascade.loadAd();
+    }
+
+    @Override
     public void onAdPresentationFinished(LinearLayout adContainer) {
         Log.d(LOGTAG, "time to refresh Ad");
-        //checks if has loaded ad
-        if(loadedAd != null) {
-            //show new ad and start loading another ad
-            presentedAd = loadedAd;
-            presenter.startPresentation(presentedAd, adContainer);
-            cascade.reset();
-            cascade.loadAd();
+        if(loadedAd != null) { // LOADED
+            presentationAd = loadedAd;
+            presenter.startPresentation(presentationAd, adContainer);
+        } else { //LOADING
+            updateAd = true;
         }
     }
 
@@ -127,11 +135,13 @@ public class StandardController implements Controller, StandardPresenterListener
     public void adLoaded(NetworkAd ad) {
         Log.d(LOGTAG, "Ad Loaded");
         Log.d(LOGTAG, "--------------------------------------");
-        loadedAd = ad;
-        //check if needs to show ad
-        if (presentedAd == null) {
-            presentedAd = loadedAd;
-            presenter.startPresentation(presentedAd, presenter.adContainer);
+        if (updateAd) { // LOADING
+            loadedAd = ad;
+            presentationAd = loadedAd;
+            presenter.startPresentation(presentationAd, presenter.adContainer);
+            updateAd = false;
+        } else { // LOADED
+            loadedAd = ad;
         }
     }
 

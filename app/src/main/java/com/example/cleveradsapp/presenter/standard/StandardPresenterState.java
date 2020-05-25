@@ -2,12 +2,14 @@ package com.example.cleveradsapp.presenter.standard;
 
 import android.util.Log;
 
-public enum StandardPresenterState {
+import java.util.concurrent.TimeUnit;
 
-    DISABLED {
+public enum StandardPresenterState {
+    DISABLED_PRESENTING {
         @Override
         void enable() {
-            presenter.currentState = StandardPresenterState.BLOCKED;
+            Log.d("TestAds_DISABLED", "enable");
+            resumePresentation();
         }
 
         @Override
@@ -18,6 +20,36 @@ public enum StandardPresenterState {
         @Override
         void startPresentation() {
 
+        }
+
+        @Override
+        void resumePresentation() {
+            Log.d("TestAds_DISABLED", "resume ad presentation");
+            presenter.currentState = StandardPresenterState.PRESENTING;
+            updateAdView();
+            resumeAdPresentationTimer();
+        }
+
+        @Override
+        void pausePresentation() {
+
+        }
+    },
+    DISABLED_BLOCKED {
+        @Override
+        void enable() {
+            Log.d("TestAds_DISABLED", "enable");
+            presenter.currentState = StandardPresenterState.BLOCKED;
+        }
+
+        @Override
+        void disable() {
+
+        }
+
+        @Override
+        void startPresentation() {
+            //Log.d("TestAds_DISABLED", "startPresentation");
         }
 
         @Override
@@ -39,20 +71,22 @@ public enum StandardPresenterState {
 
         @Override
         void disable() {
-            presenter.currentState = StandardPresenterState.DISABLED;
+            Log.d("TestAds_BLOCKED", "disable");
+            presenter.currentState = StandardPresenterState.DISABLED_BLOCKED;
         }
 
         @Override
         void startPresentation() {
-            Log.d(LOG_TAG, "start ad presentation");
+            Log.d("TestAds_BLOCKED", "startPresentation");
             presenter.currentState = StandardPresenterState.PRESENTING;
             updateAdView();
             startAdPresentationTimer();
+            presenter.listener.onAdPresentationStarted();
         }
 
         @Override
         void resumePresentation() {
-            Log.d(LOG_TAG, "resume ad presentation");
+            Log.d("TestAds_BLOCKED", "resume ad presentation");
             presenter.currentState = StandardPresenterState.PRESENTING;
             updateAdView();
             resumeAdPresentationTimer();
@@ -72,14 +106,18 @@ public enum StandardPresenterState {
 
         @Override
         void disable() {
-            presenter.currentState = StandardPresenterState.DISABLED;
-            saveAdPresentationTime();
+            Log.d("TestAds_PRESENTING", "disable");
+            presenter.currentState = StandardPresenterState.DISABLED_PRESENTING;
+            presenter.handler.removeCallbacks(presenter.r);
             removeAdFromContainer();
         }
 
         @Override
         void startPresentation() {
-
+            Log.d("TestAds_PRESENTING", "startPresentation");
+            updateAdView();
+            startAdPresentationTimer();
+            presenter.listener.onAdPresentationStarted();
         }
 
         @Override
@@ -89,10 +127,10 @@ public enum StandardPresenterState {
 
         @Override
         void pausePresentation() {
+            Log.d("TestAds_PRESENTING", "pausePresentation");
             presenter.currentState = StandardPresenterState.BLOCKED;
-            saveAdPresentationTime();
+            pauseAdPresentationTimer();
         }
-
     };
 
     protected String LOG_TAG = "TestAds_StandardPresenterState";
@@ -112,8 +150,13 @@ public enum StandardPresenterState {
         waitAdPresentationFinish(presenter.timeToAdPresentationFinish);
     }
 
+    protected void pauseAdPresentationTimer() {
+        presenter.handler.removeCallbacks(presenter.r);
+        saveAdPresentationTime();
+    }
+
     protected void resumeAdPresentationTimer() {
-        presenter.startTime = System.nanoTime();
+        Log.d(LOG_TAG, "remainingTime: " + presenter.remainingTime);
         waitAdPresentationFinish(presenter.remainingTime);
     }
 
@@ -130,7 +173,9 @@ public enum StandardPresenterState {
 
     public void saveAdPresentationTime() {
         presenter.elapsedTime = System.nanoTime() - presenter.startTime;
-        presenter.remainingTime = presenter.timeToAdPresentationFinish - presenter.elapsedTime;
+        presenter.remainingTime = TimeUnit.MILLISECONDS.toNanos(presenter.timeToAdPresentationFinish) - presenter.elapsedTime;
+        /*Log.d(LOG_TAG, "startTime: " + presenter.startTime + " elapsedTime: " + presenter.elapsedTime +
+              " timeToAdPresentationFinish: " + presenter.timeToAdPresentationFinish + " timeToAdPresentationFinish: " + presenter.remainingTime);*/
     }
 
     public void removeAdFromContainer() {

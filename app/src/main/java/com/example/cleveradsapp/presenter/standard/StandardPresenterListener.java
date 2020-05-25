@@ -6,5 +6,7 @@ import com.example.cleveradsapp.presenter.PresenterListener;
 
 public interface StandardPresenterListener extends PresenterListener {
 
+    void onAdPresentationStarted();
+
     void onAdPresentationFinished(LinearLayout adContainer);
 }
