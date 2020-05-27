@@ -12,16 +12,21 @@ public class ActivityHolder implements Application.ActivityLifecycleCallbacks {
 
     private static ActivityHolder activityHolder_instance = null;
     private Activity currentActivity;
+    private CleverAdsPlugin cleverAdsPlugin;
 
     private ActivityHolder() {
         Log.d("TestAds_ActivityHolder", "Instance of ActivityHolder created");
     }
 
     public static ActivityHolder getInstance() {
-        if(activityHolder_instance == null) {
+        if (activityHolder_instance == null) {
             activityHolder_instance = new ActivityHolder();
         }
         return activityHolder_instance;
+    }
+
+    public void setCleverAdsPlugin(CleverAdsPlugin cleverAdsPlugin) {
+        this.cleverAdsPlugin = cleverAdsPlugin;
     }
 
     public Activity getCurrentActivity() {
@@ -35,6 +40,14 @@ public class ActivityHolder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         activityHolder_instance.currentActivity = activity;
+        Log.d("TestAds_ActivityHolder", "onActivityResumed: " + activity.toString());
+        cleverAdsPlugin.onActivityResume();
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+//        Log.d("TestAds_ActivityHolder", "onActivityPaused: " + activity.toString());
+        cleverAdsPlugin.onActivityPause();
     }
 
     @Override
@@ -45,11 +58,6 @@ public class ActivityHolder implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
 //        Log.d("TestAds_ActivityHolder", "onActivityCreated: " + activity.toString());
-    }
-
-    @Override
-    public void onActivityPaused(@NonNull Activity activity) {
-//        Log.d("TestAds_ActivityHolder", "onActivityPaused: " + activity.toString());
     }
 
     @Override

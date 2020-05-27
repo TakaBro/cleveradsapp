@@ -28,19 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         adContainer = findViewById(R.id.banner_container);
-        if(cleverAdsPlugin == null) {
+        if (cleverAdsPlugin == null) {
             cleverAdsConfig = new CleverAdsPluginConfiguration();
             cleverAdsPlugin = new CleverAdsPlugin(cleverAdsConfig.getstandardPoolTags(),
                     cleverAdsConfig.getAdType(), cleverAdsConfig.getAdWaitTimeLimit(), this);
         }
         registerActivityLifecycleCallbacks(ActivityHolder.getInstance());
-        registerActivityLifecycleCallbacks(cleverAdsPlugin);
     }
 
     public void goToBannerActivity(View view) {
         //cleverAdsPlugin.showStandardAd();
         Intent intent = new Intent(this, BannerActivity.class);
-        //intent.putExtra("clever_ads_plugin", cleverAdsPlugin);
         startActivity(intent);
     }
 
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         //Is the switch on?
         boolean on = ((Switch) view).isChecked();
 
-        if(on) {
+        if (on) {
             //tView.setText("Enable Standard ON");
             cleverAdsPlugin.enableStandardAd(adContainer);
         } else {
@@ -60,21 +58,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onSwitchContainerClicked(View view) {
+/*    public void onSwitchContainerClicked(View view) {
         //Get reference of TextView from XML layout
         TextView tView = findViewById(R.id.switchContainer);
 
         //Is the switch on?
         boolean on = ((Switch) view).isChecked();
 
-        if(on) {
+        if (on) {
             tView.setText("Container Appeared");
             cleverAdsPlugin.standardController.onContainerAppeared((LinearLayout) findViewById(R.id.banner_container));
         } else {
             tView.setText("Container Dissapeared");
             cleverAdsPlugin.standardController.onContainerDisappeared();
         }
-    }
+    }*/
 
     public void showStandardAd(View view) {
         cleverAdsPlugin.standardController.onContainerAppeared((LinearLayout) findViewById(R.id.banner_container));

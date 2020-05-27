@@ -24,7 +24,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
-public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityLifecycleCallbacks {
+public class CleverAdsPlugin implements LifecycleObserver/*, Application.ActivityLifecycleCallbacks*/ {
 
     private String LOGTAG = "TestAds_CleverAdsPlugin";
     private Boolean firstExecution = true;
@@ -36,6 +36,7 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
                            Activity activity) {
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         ActivityHolder.getInstance().setCurrentActivity(activity);
+        ActivityHolder.getInstance().setCleverAdsPlugin(this);
         initializeSDKs(activity);
         controllerFactory = new ControllerFactory();
         standardController = controllerFactory.createStandardController(poolTags, adWaitTimeLimit);
@@ -91,20 +92,39 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
         standardController.pause();
     }
 
-    @Override
-    public void onActivityResumed(@NonNull Activity activity) {
-        if(ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
+    public void onActivityResume() {
+        Log.d(LOGTAG, "Activity on RESUME");
+        if (ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
             Log.d(LOGTAG, "This Activity contains banner_container!");
             standardController.onContainerAppeared((LinearLayout)ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container));
-        }/* else {
+        } else if (ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.another_banner_container) != null){
+            Log.d(LOGTAG, "This Activity contains another_banner_container!");
+            standardController.onContainerAppeared((LinearLayout)ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.another_banner_container));
+        }
+    }
+
+    public void onActivityPause() {
+        Log.d(LOGTAG, "Activity on PAUSE");
+        if (ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null ||
+                ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.another_banner_container) != null) {
             standardController.onContainerDisappeared();
-        }*/
+        }
+    }
+
+    /*@Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        if (ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
+            Log.d(LOGTAG, "This Activity contains banner_container!");
+            standardController.onContainerAppeared((LinearLayout)ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container));
+        }*//* else {
+            standardController.onContainerDisappeared();
+        }*//*
         Log.d(LOGTAG, "onActivityResumed" + activity.toString());
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-        if(ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
+        if (ActivityHolder.getInstance().getCurrentActivity().findViewById(R.id.banner_container) != null) {
             standardController.onContainerDisappeared();
         }
         Log.d(LOGTAG, "onActivityPaused: " + activity.toString());
@@ -133,5 +153,5 @@ public class CleverAdsPlugin implements LifecycleObserver, Application.ActivityL
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
 
-    }
+    }*/
 }

@@ -19,9 +19,9 @@ public class StandardController implements Controller, StandardPresenterListener
     private SimpleCascade cascade;
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
-    private Boolean updateAd = false;
+    private Boolean adLoaded = false;
+    private Boolean adExpired = false;
     protected NetworkAd loadedAd = null;
-    protected NetworkAd presentationAd = null;
 
     public StandardController(LinkedHashMap<String, String> tags, long adWaitTimeLimit) {
         setupCascade(this, adWaitTimeLimit);
@@ -58,13 +58,7 @@ public class StandardController implements Controller, StandardPresenterListener
 
     public void onContainerAppeared(LinearLayout adContainer) {
         Log.d(LOGTAG, "onContainerAppeared");
-        if (presentationAd != null) { // PRESENTING
-            presenter.resumePresentation(presentationAd, adContainer);
-        } else if(loadedAd != null) { // NOT STARTED
-            presenter.startPresentation(loadedAd, adContainer);
-        } else {
-            Log.d(LOGTAG, "Standard Ad is NULL");
-        }
+        presenter.showAd(loadedAd, adContainer);
     }
 
     public void onContainerDisappeared() {
@@ -115,33 +109,31 @@ public class StandardController implements Controller, StandardPresenterListener
     //StandardPresenterListener
     @Override
     public void onAdPresentationStarted() {
-        presentationAd = loadedAd;
         cascade.loadAd();
     }
 
     @Override
-    public void onAdPresentationFinished(LinearLayout adContainer) {
+    public void onAdPresentationFinished(NetworkAd presentationAd, LinearLayout adContainer) {
         Log.d(LOGTAG, "time to refresh Ad");
-        if(loadedAd != null) { // LOADED
-            presentationAd = loadedAd;
-            presenter.startPresentation(presentationAd, adContainer);
-        } else { //LOADING
-            updateAd = true;
+        if (adLoaded) {
+            presenter.startPresentation(loadedAd, adContainer);
+            adLoaded = false;
+        } else {
+            Log.d(LOGTAG, "adExpired");
+            adExpired = true;
         }
     }
 
     //CascadeListener
     @Override
     public void adLoaded(NetworkAd ad) {
-        Log.d(LOGTAG, "Ad Loaded");
-        Log.d(LOGTAG, "--------------------------------------");
-        if (updateAd) { // LOADING
-            loadedAd = ad;
-            presentationAd = loadedAd;
-            presenter.startPresentation(presentationAd, presenter.adContainer);
-            updateAd = false;
-        } else { // LOADED
-            loadedAd = ad;
+        Log.d(LOGTAG, "Ad Loaded \n" + "--------------------------------------");
+        loadedAd = ad;
+        adLoaded = true;
+        if (adExpired) {
+            Log.d(LOGTAG, "needs to refresh Ad");
+            presenter.startPresentation(loadedAd, presenter.adContainer);
+            adExpired = false;
         }
     }
 

@@ -8,20 +8,21 @@ import com.example.cleveradsapp.networkAd.NetworkAd;
 import com.example.cleveradsapp.networkAd.NetworkAdPresenterListener;
 import com.example.cleveradsapp.presenter.Presenter;
 
-public class StandardPresenter implements Presenter, NetworkAdPresenterListener {
+public class StandardPresenter implements Presenter, StandardPresenterInterface ,NetworkAdPresenterListener {
 
-    protected String LOG_TAG = "TestAds_StandardPresenter";
+    protected String LOGTAG = "TestAds_StandardPresenter";
     protected StandardPresenterListener listener;
     protected Runnable r;
     protected Handler handler = new Handler();
     protected long startTime, elapsedTime, timeToAdPresentationFinish;
     protected long remainingTime = 0;
-    protected NetworkAd ad;
+    protected NetworkAd presentationAd = null;
     public LinearLayout adContainer;
+    protected Boolean firsTimePresentation = true;
     protected StandardPresenterState currentState;
 
     public StandardPresenter(long timeToAdPresentationFinish) {
-        Log.d(LOG_TAG, "timeToAdPresentationFinish: " + timeToAdPresentationFinish);
+        Log.d(LOGTAG, "timeToAdPresentationFinish: " + timeToAdPresentationFinish);
         this.timeToAdPresentationFinish = timeToAdPresentationFinish;
         StandardPresenterState.DISABLED_PRESENTING.setPresenter(this);
         StandardPresenterState.DISABLED_BLOCKED.setPresenter(this);
@@ -31,27 +32,34 @@ public class StandardPresenter implements Presenter, NetworkAdPresenterListener 
     }
 
     public void enable() {
-        Log.d(LOG_TAG, "Enable Standard Ad");
+        Log.d(LOGTAG, "Enable Standard Ad");
         currentState.enable();
     }
 
     public void disable() {
-        Log.d(LOG_TAG, "Disable Standard Ad");
+        Log.d(LOGTAG, "Disable Standard Ad");
         currentState.disable();
+    }
+
+    @Override
+    public void showAd(NetworkAd ad, LinearLayout adContainer) {
+        if (presentationAd != null) { // RESUME
+            resumePresentation(adContainer);
+        } else if (ad != null) { // NOT STARTED
+            startPresentation(ad, adContainer);
+        } else {
+            Log.d(LOGTAG, "Standard Ad is NULL");
+        }
     }
 
     public void startPresentation(NetworkAd ad, LinearLayout adContainer) {
         Log.d("TestAds_Presenter", "startPresentation");
-        this.adContainer = adContainer;
-        this.ad = ad;
-        currentState.startPresentation();
+        currentState.startPresentation(ad, adContainer);
     }
 
-    public void resumePresentation(NetworkAd ad, LinearLayout adContainer) {
+    public void resumePresentation(LinearLayout adContainer) {
         Log.d("TestAds_Presenter", "resumePresentation");
-        this.adContainer = adContainer;
-        this.ad = ad;
-        currentState.resumePresentation();
+        currentState.resumePresentation(adContainer);
     }
 
     public void pausePresentation() {
