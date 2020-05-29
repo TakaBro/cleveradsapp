@@ -6,8 +6,6 @@ import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.networkAd.NetworkAd;
 
-import java.util.concurrent.TimeUnit;
-
 public enum StandardPresenterState {
     DISABLED_PRESENTING {
         @Override
@@ -189,8 +187,8 @@ public enum StandardPresenterState {
     public void saveAdPresentationTime() {
         presenter.elapsedTime = System.currentTimeMillis() - presenter.startTime;
         presenter.remainingTime = presenter.timeToAdPresentationFinish - presenter.elapsedTime;
-        Log.d(LOG_TAG, "startTime: " + presenter.startTime + " elapsedTime: " + presenter.elapsedTime +
-              " timeToAdPresentationFinish: " + presenter.timeToAdPresentationFinish + " timeToAdPresentationFinish: " + presenter.remainingTime);
+        /*Log.d(LOG_TAG, "startTime: " + presenter.startTime + " elapsedTime: " + presenter.elapsedTime +
+              " timeToAdPresentationFinish: " + presenter.timeToAdPresentationFinish + " timeToAdPresentationFinish: " + presenter.remainingTime);*/
     }
 
     public void removeAdFromContainer() {

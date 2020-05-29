@@ -6,7 +6,7 @@ import com.example.cleveradsapp.networkAd.NetworkAd;
 
 public class CrazyCascadeLoadingState extends AbstractCrazyCascadeState {
 
-    private String logTag = "TestAds_LoadingState";
+    private String logTag = "TestAds_CrazyLoadingState";
 
     public CrazyCascadeLoadingState(CrazyCascade crazyCascade) {
         super(crazyCascade);

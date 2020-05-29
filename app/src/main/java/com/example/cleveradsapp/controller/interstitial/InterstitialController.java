@@ -1,7 +1,6 @@
 package com.example.cleveradsapp.controller.interstitial;
 
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import com.example.cleveradsapp.ActivityHolder;
 import com.example.cleveradsapp.controller.Controller;
@@ -17,7 +16,7 @@ import java.util.LinkedHashMap;
 
 public class InterstitialController implements Controller, PresenterListener, CascadeListener {
 
-    private String LOGTAG = "TestAds_Controller";
+    private String LOGTAG = "TestAds_InterstitialController";
     private NetworkAd adLoaded;
     private CrazyCascade cascade;
     private InterstitialPresenter presenter;

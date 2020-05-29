@@ -65,7 +65,7 @@ public class SimpleCascade implements Cascade, NetworkAdLoadListener {
 
     @Override
     public void adFailedToLoad() {
-        Log.d(LOG_TAG, "currentState.onAdLoaded(ad)");
+        Log.d(LOG_TAG, "currentState.onAdFailedToLoad(ad)");
         currentState.onAdFailedToLoad();
     }
 }

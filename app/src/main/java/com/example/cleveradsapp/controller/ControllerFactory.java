@@ -23,11 +23,11 @@ public class ControllerFactory {
                 break;
             case 1:
                 Log.d("TestAds_ControlFactory", "Interstitial Controller created");
-                controller = new InterstitialController(tags);
+                controller = createInterstitialController(tags);
                 break;
             case 2:
-                Log.d("TestAds_ControlFactory", "AppLovinNetworkAd created");
-                // new Interstitial Controller
+                Log.d("TestAds_ControlFactory", "Rewarded Controller created");
+                // Rewarded Controller
                 break;
             default:
                 //Log.d(LOGTAG, "--------------------------------------");

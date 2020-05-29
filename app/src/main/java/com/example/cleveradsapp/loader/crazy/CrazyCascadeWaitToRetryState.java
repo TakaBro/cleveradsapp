@@ -4,7 +4,7 @@ import com.example.cleveradsapp.loader.CascadeListener;
 
 public class CrazyCascadeWaitToRetryState extends AbstractCrazyCascadeState {
 
-    private String logTag = "TestAds_WaitToRetryState";
+    private String logTag = "TestAds_CrazyWaitToRetryState";
 
     public CrazyCascadeWaitToRetryState(CrazyCascade crazyCascade) {
         super(crazyCascade);

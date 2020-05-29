@@ -4,7 +4,7 @@ import com.example.cleveradsapp.loader.CascadeListener;
 
 public class CrazyCascadeReadyState extends AbstractCrazyCascadeState {
 
-    private String logTag = "TestAds_ReadyState";
+    private String logTag = "TestAds_CrazyReadyState";
 
     public CrazyCascadeReadyState(CrazyCascade crazyCascade) {
         super(crazyCascade);

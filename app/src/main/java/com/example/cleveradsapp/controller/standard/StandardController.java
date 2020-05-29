@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 
 public class StandardController implements Controller, StandardPresenterListener, CascadeListener {
 
-    private String LOGTAG = "TestAds_Controller";
+    private String LOGTAG = "TestAds_StandardController";
     private SimpleCascade cascade;
     private StandardPresenter presenter;
     private StandardNetworkAdFactory standardNetworkAdFactory;
@@ -85,14 +85,12 @@ public class StandardController implements Controller, StandardPresenterListener
     public void pause() {
         Log.d(LOGTAG, "Pause Standard Ad");
         cascade.pause();
-        presenter.pausePresentation();
     }
 
     @Override
     public void resume() {
         Log.d(LOGTAG, "Continue Standard Ad");
         cascade.resume();
-        presenter.resume();
     }
 
     //PresenterListener
